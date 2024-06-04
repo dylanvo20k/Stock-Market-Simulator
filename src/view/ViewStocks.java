@@ -1,6 +1,10 @@
 package view;
 
 import java.util.Scanner;
+
+import model.Portfolio;
+import model.StockInfo;
+
 public class ViewStocks {
   private Scanner scanner;
 
@@ -27,7 +31,7 @@ public class ViewStocks {
   }
 
   public void displayPortfolioValue(Portfolio portfolio, String date, double value) {
-    System.out.println("The value of portfolio " + portfolio.getName() + " on " + date + " is $" + value);
+    System.out.println("The value of portfolio " + portfolio.getClientName() + " on " + date + " is $" + value);
   }
 
   public void displayStockInfo(StockInfo stock, String startDate, String endDate) {
