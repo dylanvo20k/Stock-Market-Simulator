@@ -1,3 +1,5 @@
+package model;
+
 import java.time.LocalDate;
 
 public class StockInfo {
@@ -15,7 +17,7 @@ public class StockInfo {
     return companyName;
   }
 
-  public String getTicketSymbol() {
+  public String getTickerSymbol() {
     return tickerSymbol;
   }
 

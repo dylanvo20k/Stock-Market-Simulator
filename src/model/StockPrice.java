@@ -1,3 +1,5 @@
+package model;
+
 public class StockPrice {
   private double openingPrice;
   private double closingPrice;
