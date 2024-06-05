@@ -12,7 +12,7 @@ public class ViewStocks {
     this.scanner = new Scanner(System.in);
   }
 
-  public void menu() {
+  public void displayMenu() {
     System.out.println("Stocks Menu");
     System.out.println("1. Examine gain or loss of a stock over a specified period.");
     System.out.println("2. Examine x-day moving average of a stock for a specified date.");
