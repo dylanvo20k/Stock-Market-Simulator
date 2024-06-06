@@ -2,7 +2,9 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +15,6 @@ import java.util.Map;
 
 public class PortfolioManager {
   private static final String API_KEY = "1NWYKFC079957SBS"; // Replace with your own API key
-  private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
   public double calculateMovingDayAverage(String tickerSymbol, int days, LocalDate endDate) {
     if (!isValidTicker(tickerSymbol)) {
@@ -52,14 +53,32 @@ public class PortfolioManager {
   }
 
   private List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
-    String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
-    URL url = new URL(apiUrl);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-    String line;
-    Map<LocalDate, Double> stockPrices = new HashMap<>();
+    StringBuilder output = new StringBuilder();
+    URL url = null;
 
-    // Read the CSV data
-    while ((line = reader.readLine()) != null) {
+    try {
+      url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
+              + "&outputsize=full"
+              + "&symbol=" + tickerSymbol
+              + "&apikey=" + API_KEY
+              + "&datatype=csv");
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
+    }
+
+    try {
+      InputStream in = url.openStream();
+      int b;
+      while ((b = in.read()) != - 1) {
+        output.append((char) b);
+      }
+    } catch (IOException e) {
+      throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+    }
+
+    String[] lines = output.toString().split("\n");
+    Map<LocalDate, Double> stockPrices = new HashMap<>();
+    for (String line : lines) {
       String[] values = line.split(",");
       if (values.length < 5 || values[0].equals("timestamp")) {
         continue;
@@ -70,7 +89,6 @@ public class PortfolioManager {
         stockPrices.put(dataDate, closingPrice);
       }
     }
-    reader.close();
 
     List<Double> closingPrices = new ArrayList<>();
     for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
@@ -83,19 +101,28 @@ public class PortfolioManager {
   }
 
   private boolean isValidTicker(String tickerSymbol) {
+    StringBuilder output = new StringBuilder();
+    URL url = null;
+
     try {
-      String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
-      URL url = new URL(apiUrl);
-      BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-      String line = reader.readLine(); // Read the first line of the response
-      reader.close();
-
-      // Check if the response contains valid data (not an error message)
-      return line != null && !line.contains("Error Message");
-    } catch (IOException e) {
-      return false; // An exception occurred, indicating an invalid ticker symbol
+      url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
+              + "&outputsize=full"
+              + "&symbol=" + tickerSymbol
+              + "&apikey=" + API_KEY
+              + "&datatype=csv");
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
     }
+
+    try (InputStream in = url.openStream()) {
+      int b;
+      while ((b = in.read()) != -1) {
+        output.append((char) b);
+      }
+    } catch (IOException e) {
+      return false;
+    }
+    System.out.println(output.toString());
+    return !output.toString().contains("Error Message");
   }
-
-
 }

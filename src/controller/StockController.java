@@ -105,7 +105,7 @@ public class StockController {
     LocalDate date = LocalDate.parse(dateStr);
 
     try {
-      double totalValue = portfolio.getPortfolioValue(date);
+      double totalValue = portfolio.calculatePortfolioValue(date);
       System.out.println("Total portfolio value on " + date + ": " + totalValue);
     } catch (RuntimeException e) {
       System.out.println("Error: " + e.getMessage());

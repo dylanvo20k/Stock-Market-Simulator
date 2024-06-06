@@ -25,11 +25,10 @@ public class Portfolio {
     stockList.add(stock);
   }
 
-  public double getPortfolioValue(LocalDate date) {
+  public double calculatePortfolioValue(LocalDate date) {
     double totalValue = 0.0;
     for (StockInfo stock : stockList) {
-      double stockValue = stock.getStockValueOnDate(date);
-      totalValue += stockValue;
+      totalValue += stock.getStockValueOnDate(date);
     }
     return totalValue;
   }
