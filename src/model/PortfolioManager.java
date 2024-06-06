@@ -87,12 +87,15 @@ public class PortfolioManager {
       String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
       URL url = new URL(apiUrl);
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-      String line = reader.readLine();
+      String line = reader.readLine(); // Read the first line of the response
       reader.close();
 
-      return line != null && line.contains("timestamp") && line.contains("close");
+      // Check if the response contains valid data (not an error message)
+      return line != null && !line.contains("Error Message");
     } catch (IOException e) {
-      return false;
+      return false; // An exception occurred, indicating an invalid ticker symbol
     }
   }
+
+
 }
