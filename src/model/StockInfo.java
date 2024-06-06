@@ -14,7 +14,7 @@ public class StockInfo {
   private String tickerSymbol;
   private LocalDate stockDate;
   private int quantity;
-  private static final String API_KEY = "1NWYKFC079957SBS";
+  private static final String API_KEY = "1NWYKFC079957SBS"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
   public StockInfo(String companyName, String tickerSymbol, String stockDate, int quantity) {
@@ -59,6 +59,7 @@ public class StockInfo {
     String line;
     Map<LocalDate, Double> stockPrices = new HashMap<>();
 
+    // Read the CSV data
     while ((line = reader.readLine()) != null) {
       String[] values = line.split(",");
       if (values.length < 5 || values[0].equals("timestamp")) {
@@ -70,6 +71,7 @@ public class StockInfo {
     }
     reader.close();
 
+    // Return the stock price on the requested date
     Double price = stockPrices.get(date);
     if (price == null) {
       throw new IllegalArgumentException("No price data found for " + tickerSymbol + " on " + date);
@@ -84,7 +86,8 @@ public class StockInfo {
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
       String line = reader.readLine();
       reader.close();
-      return line != null && line.contains("timestamp");
+
+      return line != null && !line.contains("Error Message") && line.contains("timestamp");
     } catch (IOException e) {
       return false;
     }

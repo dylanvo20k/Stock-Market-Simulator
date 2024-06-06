@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PortfolioManager {
-  private static final String API_KEY = "1NWYKFC079957SBS";
+  private static final String API_KEY = "1NWYKFC079957SBS"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
   public double calculateMovingDayAverage(String tickerSymbol, int days, LocalDate endDate) {
@@ -89,7 +89,8 @@ public class PortfolioManager {
       BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
       String line = reader.readLine();
       reader.close();
-      return line != null && line.contains("timestamp");
+
+      return line != null && line.contains("timestamp") && line.contains("close");
     } catch (IOException e) {
       return false;
     }
