@@ -13,6 +13,7 @@ public class StockController {
   private PortfolioManager portfolioManager;
   private List<Portfolio> portfolios;
 
+
   public StockController() {
     portfolioManager = new PortfolioManager();
     portfolios = new ArrayList<>();

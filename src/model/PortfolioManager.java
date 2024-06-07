@@ -1,9 +1,13 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,9 +51,6 @@ public class PortfolioManager {
   }
 
   public double calculateGainOrLoss(String tickerSymbol, LocalDate startDate, LocalDate endDate) {
-    if (!isValidTicker(tickerSymbol)) {
-      throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
-    }
     try {
       List<Double> closingPrices = fetchClosingPrices(tickerSymbol, startDate, endDate);
       if (closingPrices.size() < 2) {
@@ -70,7 +71,6 @@ public class PortfolioManager {
     BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
     String line;
     StringBuilder output = new StringBuilder();
-    URL url = null;
 
     try {
       url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
@@ -118,5 +118,69 @@ public class PortfolioManager {
       }
     }
     return closingPrices;
+  }
+
+  public List<StockPrice> fetchStockPrices(String tickerSymbol) throws IOException {
+    List<StockPrice> stockPrices = new ArrayList<>();
+    String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
+    URL url = new URL(apiUrl);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+    String line;
+    reader.readLine(); // Skip the header
+
+    while ((line = reader.readLine()) != null) {
+      String[] values = line.split(",");
+      LocalDate date = LocalDate.parse(values[0], DateTimeFormatter.ISO_DATE);
+      double open = Double.parseDouble(values[1]);
+      double high = Double.parseDouble(values[2]);
+      double low = Double.parseDouble(values[3]);
+      double close = Double.parseDouble(values[4]);
+
+      StockPrice stockPrice = new StockPrice(open, close, low, high, date);
+      stockPrices.add(stockPrice);
+    }
+    reader.close();
+    return stockPrices;
+  }
+
+  // Method to save stock prices to a CSV file in the resources directory
+  public void saveStockPricesToCSV(List<StockPrice> stockPrices, String fileName) {
+    String resourcePath = "src/main/resources/" + fileName;
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(resourcePath))) {
+      writer.write("date,open,high,low,close\n");
+      for (StockPrice stockPrice : stockPrices) {
+        writer.write(stockPrice.getDate() + "," + stockPrice.getOpeningPrice() + "," +
+                stockPrice.getHighPrice() + "," + stockPrice.getLowPrice() + "," +
+                stockPrice.getClosingPrice() + "\n");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Method to load stock prices from a CSV file in the resources directory
+  public List<StockPrice> loadStockPricesFromCSV(String fileName) {
+    List<StockPrice> stockPrices = new ArrayList<>();
+    String resourcePath = "src/res" + fileName;
+    String line;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(resourcePath))) {
+      br.readLine(); // Skip the header
+      while ((line = br.readLine()) != null) {
+        String[] values = line.split(",");
+        LocalDate date = LocalDate.parse(values[0], DateTimeFormatter.ISO_DATE);
+        double open = Double.parseDouble(values[1]);
+        double high = Double.parseDouble(values[2]);
+        double low = Double.parseDouble(values[3]);
+        double close = Double.parseDouble(values[4]);
+
+        StockPrice stockPrice = new StockPrice(open, close, low, high, date);
+        stockPrices.add(stockPrice);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return stockPrices;
   }
 }
