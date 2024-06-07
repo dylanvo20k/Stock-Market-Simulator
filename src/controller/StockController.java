@@ -69,26 +69,22 @@ public class StockController {
     String clientName = scanner.next();
     Portfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
-      System.out.println("Portfolio not found for client: " + clientName);
+      System.out.println("Portfolio not found!");
       return;
     }
 
-    try {
-      System.out.print("Enter company name: ");
-      String companyName = scanner.next();
-      System.out.print("Enter ticker symbol: ");
-      String tickerSymbol = scanner.next();
-      System.out.print("Enter stock date (YYYY-MM-DD): ");
-      String stockDate = scanner.next();
-      System.out.print("Enter quantity: ");
-      int quantity = scanner.nextInt();
+    System.out.print("Enter company name: ");
+    String companyName = scanner.next();
+    System.out.print("Enter ticker symbol: ");
+    String tickerSymbol = scanner.next();
+    System.out.print("Enter stock date (YYYY-MM-DD): ");
+    String stockDate = scanner.next();
+    System.out.print("Enter quantity: ");
+    int quantity = scanner.nextInt();
 
-      StockInfo stockInfo = new StockInfo(companyName, tickerSymbol, stockDate, quantity);
-      portfolio.addStock(stockInfo);
-      System.out.println("Stock added to portfolio successfully.");
-    } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
+    StockInfo stockInfo = new StockInfo(companyName, tickerSymbol, stockDate, quantity);
+    portfolio.addStock(stockInfo);
+    System.out.println("Stock added successfully.");
   }
 
   private void calculatePortfolioValue(Scanner scanner) {
@@ -96,7 +92,7 @@ public class StockController {
     String clientName = scanner.next();
     Portfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
-      System.out.println("Portfolio not found for client: " + clientName);
+      System.out.println("Portfolio not found!");
       return;
     }
 
@@ -104,12 +100,8 @@ public class StockController {
     String dateStr = scanner.next();
     LocalDate date = LocalDate.parse(dateStr);
 
-    try {
-      double totalValue = portfolio.calculatePortfolioValue(date);
-      System.out.println("Total portfolio value on " + date + ": " + totalValue);
-    } catch (RuntimeException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
+    double totalValue = portfolio.calculatePortfolioValue(date);
+    System.out.println("Total portfolio value on " + date + ": " + totalValue);
   }
 
   private void calculateMovingDayAverage(Scanner scanner) {
@@ -121,12 +113,8 @@ public class StockController {
     String endDateStr = scanner.next();
     LocalDate endDate = LocalDate.parse(endDateStr);
 
-    try {
-      double movingAverage = portfolioManager.calculateMovingDayAverage(tickerSymbol, days, endDate);
-      System.out.println("Moving day average: " + movingAverage);
-    } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
+    double movingAverage = portfolioManager.calculateMovingDayAverage(tickerSymbol, days, endDate);
+    System.out.println("Moving day average: " + movingAverage);
   }
 
   private void detectCrossovers(Scanner scanner) {
@@ -141,12 +129,8 @@ public class StockController {
     String endDateStr = scanner.next();
     LocalDate endDate = LocalDate.parse(endDateStr);
 
-    try {
-      List<LocalDate> crossovers = portfolioManager.detectCrossovers(tickerSymbol, days, startDate, endDate);
-      System.out.println("Crossovers detected on: " + crossovers);
-    } catch (IllegalArgumentException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
+    List<LocalDate> crossovers = portfolioManager.detectCrossovers(tickerSymbol, days, startDate, endDate);
+    System.out.println("Crossovers detected on: " + crossovers);
   }
 
   private Portfolio findPortfolioByClientName(String clientName) {

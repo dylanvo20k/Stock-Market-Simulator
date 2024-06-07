@@ -35,26 +35,20 @@ public class StockInfoTest {
   }
 
   @Test
-  public void testGetStockValueOnDate() throws Exception {
-    // mocks the url and BufferedReader to simulate an API response
-    String apiResponse = "timestamp,open,high,low,close,volume\n" +
-            "2023-06-01,150.00,155.00,149.00,154.00,1000000\n" +
-            "2023-05-31,148.00,152.00,147.00,150.00,900000";
-    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(apiResponse.getBytes());
-    BufferedReader mockBufferedReader = new BufferedReader(new InputStreamReader(byteArrayInputStream));
+  public void testGetStockValueOnDate() {
+    // Create a StockInfo instance for testing
+    StockInfo stockInfo = new StockInfo("Apple Inc.", "AAPL", "2024-06-01", 10);
 
-    // uses reflectiont o replace actual URL connection with mock
-    URL originalUrl = new URL(String.format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv", "AAPL", "1NWYKFC079957SBS"));
-    HttpURLConnection mockHttpURLConnection = (HttpURLConnection) originalUrl.openConnection();
-    mockHttpURLConnection.setDoInput(true);
-    mockHttpURLConnection.getInputStream();
-    stockInfo.getClass().getDeclaredField("API_URL_TEMPLATE").setAccessible(true);
-    stockInfo.getClass().getDeclaredField("API_URL_TEMPLATE").set(stockInfo, mockHttpURLConnection.getURL());
+    // Define a test date for which we expect to get a stock value
+    LocalDate testDate = LocalDate.of(2024, 1, 10);
 
-    // fetch stock value on a given date
-    double expectedValue = 154.00 * 10;
-    double actualValue = stockInfo.getStockValueOnDate(date);
-    assertEquals(expectedValue, actualValue, 0.01);
+    // Expected stock price (replace with the expected value for the test date)
+    double expectedPrice = 123.45; // Example value, replace with actual expected price
+
+    // Fetch the stock value for the test date
+    double actualPrice = stockInfo.getStockValueOnDate(testDate);
+
+    // Assert that the fetched price matches the expected price
+    assertEquals(expectedPrice, actualPrice, 0.001); // Tolerance for floating-point comparison
   }
-
 }

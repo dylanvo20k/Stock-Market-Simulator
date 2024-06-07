@@ -2,9 +2,7 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,12 +14,10 @@ public class StockInfo {
   private String tickerSymbol;
   private LocalDate stockDate;
   private int quantity;
-  private static final String API_KEY = "1NWYKFC079957SBS"; // Replace with your own API key
+  private static final String API_KEY = "8AHXFIPX9SVKC4LN"; // Replace with your own API key
+  private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
   public StockInfo(String companyName, String tickerSymbol, String stockDate, int quantity) {
-    if (!isValidTicker(tickerSymbol)) {
-      throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
-    }
     this.companyName = companyName;
     this.tickerSymbol = tickerSymbol;
     this.stockDate = LocalDate.parse(stockDate);
@@ -54,40 +50,25 @@ public class StockInfo {
   }
 
   private double fetchStockPriceOnDate(LocalDate date) throws IOException {
-    StringBuilder output = new StringBuilder();
-    URL url = null;
-
-    try {
-      url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
-              + "&outputsize=full"
-              + "&symbol=" + tickerSymbol
-              + "&apikey=" + API_KEY
-              + "&datatype=csv");
-    } catch (MalformedURLException e) {
-      throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
-    }
-
-    try (InputStream in = url.openStream()) {
-      int b;
-      while ((b = in.read()) != -1) {
-        output.append((char) b);
-      }
-    } catch (IOException e) {
-      throw new IllegalArgumentException("No price data found for " + tickerSymbol);
-    }
-
-    String[] lines = output.toString().split("\n");
+    String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, getApiKey());
+    URL url = new URL(apiUrl);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+    String line;
     Map<LocalDate, Double> stockPrices = new HashMap<>();
-    for (String line : lines) {
+
+    // Read the CSV data
+    while ((line = reader.readLine()) != null) {
       String[] values = line.split(",");
       if (values.length < 5 || values[0].equals("timestamp")) {
         continue;
       }
-      LocalDate dataDate = LocalDate.parse(values[0], DateTimeFormatter.ISO_DATE);
+      LocalDate dataDate = LocalDate.parse(values[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Update date format here
       double closingPrice = Double.parseDouble(values[4]);
       stockPrices.put(dataDate, closingPrice);
     }
+    reader.close();
 
+    // Return the stock price on the requested date
     Double price = stockPrices.get(date);
     if (price == null) {
       throw new IllegalArgumentException("No price data found for " + tickerSymbol + " on " + date);
@@ -95,29 +76,7 @@ public class StockInfo {
     return price;
   }
 
-  private boolean isValidTicker(String tickerSymbol) {
-    StringBuilder output = new StringBuilder();
-    URL url = null;
-
-    try {
-      url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
-              + "&outputsize=full"
-              + "&symbol=" + tickerSymbol
-              + "&apikey=" + API_KEY
-              + "&datatype=csv");
-    } catch (MalformedURLException e) {
-      throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
-    }
-
-    try (InputStream in = url.openStream()) {
-      int b;
-      while ((b = in.read()) != -1) {
-        output.append((char) b);
-      }
-    } catch (IOException e) {
-      return false;
-    }
-
-    return !output.toString().contains("Error Message");
+  public static String getApiKey() {
+    return API_KEY;
   }
 }

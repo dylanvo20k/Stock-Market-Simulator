@@ -60,7 +60,7 @@ public class PortfolioTest {
     List<StockInfo> initialStocks = Arrays.asList(stock1, stock2);
     Portfolio portfolio = new Portfolio("John Doe", initialStocks);
 
-    assertEquals(expectedValue, portfolio.getPortfolioValue(date), 0.01);
+    assertEquals(expectedValue, portfolio.calculatePortfolioValue(date), 0.01);
 
   }
 }
