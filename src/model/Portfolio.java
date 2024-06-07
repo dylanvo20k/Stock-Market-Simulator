@@ -28,7 +28,11 @@ public class Portfolio {
   public double calculatePortfolioValue(LocalDate date) {
     double totalValue = 0.0;
     for (StockInfo stock : stockList) {
-      totalValue += stock.getStockValueOnDate(date);
+      try {
+        totalValue += stock.getStockValueOnDate(date);
+      } catch (Exception e) {
+        System.err.println("Error fetching stock value for " + stock.getTickerSymbol() + " on " + date + ": " + e.getMessage());
+      }
     }
     return totalValue;
   }

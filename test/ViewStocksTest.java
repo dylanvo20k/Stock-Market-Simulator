@@ -2,9 +2,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import java.io.*;
 import java.util.ArrayList;
-
-import javax.swing.text.View;
-
 import model.Portfolio;
 import model.StockInfo;
 import view.ViewStocks;

@@ -2,6 +2,7 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.time.LocalDate;
@@ -45,11 +46,54 @@ public class PortfolioManager {
     }
   }
 
+  public double calculateGainOrLoss(String tickerSymbol, LocalDate startDate, LocalDate endDate) {
+    if (!isValidTicker(tickerSymbol)) {
+      throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
+    }
+    try {
+      List<Double> closingPrices = fetchClosingPrices(tickerSymbol, startDate, endDate);
+      if (closingPrices.size() < 2) {
+        throw new IllegalArgumentException("Insufficient data for the given data range, " +
+                "please provide at least 2 closing prices.");
+      }
+      double startPrice = closingPrices.get(0);
+      double endPrice = closingPrices.get(closingPrices.size() - 1);
+      return (endPrice - startPrice) / startPrice * 100;
+    } catch (IOException e) {
+      throw new RuntimeException("Error fetching stock prices: " + e.getMessage());
+    }
+  }
+
   private List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
     String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
     URL url = new URL(apiUrl);
     BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
     String line;
+    StringBuilder output = new StringBuilder();
+    URL url = null;
+
+    try {
+      url = new URL("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
+              + "&outputsize=full"
+              + "&symbol=" + tickerSymbol
+              + "&apikey=" + API_KEY
+              + "&datatype=csv");
+    } catch (MalformedURLException e) {
+      throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
+    }
+
+    try (InputStream in = url.openStream()) {
+      int b;
+      while ((b = in.read()) != - 1) {
+        output.append((char) b);
+      }
+    } catch (IOException e) {
+      throw new IllegalArgumentException("No price data found for " + tickerSymbol);
+    }
+
+    System.out.println("CSV Date " + output.toString());
+
+    String[] lines = output.toString().split("\n");
     Map<LocalDate, Double> stockPrices = new HashMap<>();
 
     // Read the CSV data
