@@ -28,7 +28,8 @@ public class StockController {
       System.out.println("3. Calculate Portfolio Value");
       System.out.println("4. Calculate Moving Day Average");
       System.out.println("5. Detect Crossovers");
-      System.out.println("6. Exit");
+      System.out.println("6. Calculate Gain or Loss");
+      System.out.println("7. Exit");
       System.out.print("Enter your choice: ");
       int choice = scanner.nextInt();
 
@@ -49,6 +50,9 @@ public class StockController {
           detectCrossovers(scanner);
           break;
         case 6:
+          calculateGainOrLoss(scanner);
+          break;
+        case 7:
           System.exit(0);
           break;
         default:
@@ -150,6 +154,23 @@ public class StockController {
     }
   }
 
+  private void calculateGainOrLoss(Scanner scanner) {
+    System.out.print("Enter ticker symbol: ");
+    String tickerSymbol = scanner.next();
+    System.out.print("Enter start date (YYYY-MM-DD): ");
+    String startDateStr = scanner.next();
+    LocalDate startDate = LocalDate.parse(startDateStr);
+    System.out.print("Enter end date (YYYY-MM-DD): ");
+    String endDateStr = scanner.next();
+    LocalDate endDate = LocalDate.parse(endDateStr);
+
+    try {
+      double gainOrLoss = portfolioManager.calculateGainOrLoss(tickerSymbol, startDate, endDate);
+      System.out.printf("Gain or Loss from %s to %s: %.2f%%\n", startDate, endDate, gainOrLoss);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+  }
   private Portfolio findPortfolioByClientName(String clientName) {
     for (Portfolio portfolio : portfolios) {
       if (portfolio.getClientName().equals(clientName)) {

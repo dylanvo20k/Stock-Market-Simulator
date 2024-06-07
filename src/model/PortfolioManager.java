@@ -52,6 +52,24 @@ public class PortfolioManager {
     }
   }
 
+  public double calculateGainOrLoss(String tickerSymbol, LocalDate startDate, LocalDate endDate) {
+    if (!isValidTicker(tickerSymbol)) {
+      throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
+    }
+    try {
+      List<Double> closingPrices = fetchClosingPrices(tickerSymbol, startDate, endDate);
+      if (closingPrices.size() < 2) {
+        throw new IllegalArgumentException("Insufficient data for the given data range, " +
+                "please provide at least 2 closing prices.");
+      }
+      double startPrice = closingPrices.get(0);
+      double endPrice = closingPrices.get(closingPrices.size() - 1);
+      return (endPrice - startPrice) / startPrice * 100;
+    } catch (IOException e) {
+      throw new RuntimeException("Error fetching stock prices: " + e.getMessage());
+    }
+  }
+
   private List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
     StringBuilder output = new StringBuilder();
     URL url = null;
