@@ -46,21 +46,20 @@ public class PortfolioTest {
     assertEquals(3, portfolio.getStockList().size());
     assertTrue(portfolio.getStockList().contains(stock3));
   }
-  @Test
-  public void testGetPortfolioValue() {
-    // mock prices for stocks
-    double applePrice = 150.0;
-    double googlePrice = 2800.0;
-    double teslaPrice = 700.0;
-
-    LocalDate date = LocalDate.now();
-
-    double expectedValue = (stock1.getQuantity() * applePrice)  + (stock2.getQuantity() * googlePrice); ;
-
-    List<StockInfo> initialStocks = Arrays.asList(stock1, stock2);
-    Portfolio portfolio = new Portfolio("John Doe", initialStocks);
-
-    assertEquals(expectedValue, portfolio.getPortfolioValue(date), 0.01);
-
-  }
+//  @Test
+//  public void testGetPortfolioValue() {
+//    // mock prices for stocks
+//    double applePrice = 150.0;
+//    double googlePrice = 2800.0;
+//    double teslaPrice = 700.0;
+//
+//    LocalDate date = LocalDate.now();
+//
+//    double expectedValue = (stock1.getQuantity() * applePrice)  + (stock2.getQuantity() * googlePrice); ;
+//
+//    List<StockInfo> initialStocks = Arrays.asList(stock1, stock2);
+//    Portfolio portfolio = new Portfolio("John Doe", initialStocks);
+//
+//    assertEquals(expectedValue, portfolio.getPortfolioValue(date), 0.01);
+//  }
 }

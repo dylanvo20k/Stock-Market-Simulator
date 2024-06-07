@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.Buffer;
 import java.time.LocalDate;
 
 import model.StockInfo;
@@ -17,7 +16,7 @@ public class StockInfoTest {
   private StockInfo stockInfo;
   private LocalDate date;
   @Before
-  public void setUp() {
+  public void setUp() throws NoSuchFieldException, IllegalAccessException {
     stockInfo = new StockInfo("Apple", "AAPL", "2023-06-01", 10);
     date = LocalDate.of(2023, 6, 1);
   }

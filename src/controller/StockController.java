@@ -22,6 +22,7 @@ public class StockController {
     Scanner scanner = new Scanner(System.in);
     while (true) {
       System.out.println("Welcome to the Stock Investment App");
+      System.out.println("You have a total of 25 queries to use, please use them accordingly.");
       System.out.println("1. Create Portfolio");
       System.out.println("2. Add Stock to Portfolio");
       System.out.println("3. Calculate Portfolio Value");
@@ -156,10 +157,5 @@ public class StockController {
       }
     }
     return null;
-  }
-
-  public static void main(String[] args) {
-    StockController app = new StockController();
-    app.start();
   }
 }

@@ -66,8 +66,7 @@ public class PortfolioManager {
       throw new RuntimeException("The Alpha Vantage API has either changed or no longer works");
     }
 
-    try {
-      InputStream in = url.openStream();
+    try ( InputStream in = url.openStream()) {
       int b;
       while ((b = in.read()) != - 1) {
         output.append((char) b);
@@ -75,6 +74,8 @@ public class PortfolioManager {
     } catch (IOException e) {
       throw new IllegalArgumentException("No price data found for " + tickerSymbol);
     }
+
+    System.out.println("CSV Date " + output.toString());
 
     String[] lines = output.toString().split("\n");
     Map<LocalDate, Double> stockPrices = new HashMap<>();
