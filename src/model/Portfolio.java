@@ -1,5 +1,7 @@
 package model;
 
+import java.io.IOException;
+import java.sql.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,5 +37,23 @@ public class Portfolio {
       }
     }
     return totalValue;
+  }
+
+  public void purchaseStock(StockInfo stock) {
+    stockList.add(stock);
+  }
+
+  public void sellStock(StockInfo stock) {
+    stockList.remove(stock);
+  }
+
+  public List<StockInfo> getComposition(LocalDate date) {
+    List<StockInfo> composition = new ArrayList<>();
+    for (StockInfo stock : stockList) {
+      if (!stock.getStockDate().isAfter(date)) {
+        composition.add(stock);
+      }
+    }
+    return composition;
   }
 }

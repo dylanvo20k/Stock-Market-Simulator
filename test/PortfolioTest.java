@@ -3,24 +3,25 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import model.MockStockInfo;
 import model.Portfolio;
 import model.StockInfo;
-import model.TestStockInfo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PortfolioTest {
   private Portfolio portfolio;
-  private TestStockInfo stock1;
-  private TestStockInfo stock2;
-  private TestStockInfo stock3;
-  private TestStockInfo stockWithException;
+  private MockStockInfo stock1;
+  private MockStockInfo stock2;
+  private MockStockInfo stock3;
+  private MockStockInfo stockWithException;
 
   @Before
   public void setUp() {
-    stock1 = new TestStockInfo("Apple", "AAPL", "2023-06-01", 10, 150.0);
-    stock2 = new TestStockInfo("Google", "GOOG", "2023-06-02", 5, 2800.0);
-    stock3 = new TestStockInfo("Tesla", "TSLA", "2023-06-03", 20, 700.0);
+    stock1 = new MockStockInfo("Apple", "AAPL", "2023-06-01", 10, 150.0);
+    stock2 = new MockStockInfo("Google", "GOOG", "2023-06-02", 5, 2800.0);
+    stock3 = new MockStockInfo("Tesla", "TSLA", "2023-06-03", 20, 700.0);
 
     List<StockInfo> initialStocks = Arrays.asList(stock1, stock2);
     portfolio = new Portfolio("John Doe", initialStocks);
