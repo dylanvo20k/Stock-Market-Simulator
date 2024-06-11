@@ -18,6 +18,9 @@ public class StockInfo {
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
   public StockInfo(String companyName, String tickerSymbol, String stockDate, int quantity) {
+    if (!isValidTicker(tickerSymbol)) {
+      throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
+    }
     this.companyName = companyName;
     this.tickerSymbol = tickerSymbol;
     this.stockDate = LocalDate.parse(stockDate);
@@ -74,6 +77,10 @@ public class StockInfo {
       throw new IllegalArgumentException("No price data found for " + tickerSymbol + " on " + date);
     }
     return price;
+  }
+
+  private boolean isValidTicker(String tickerSymbol) {
+    return tickerSymbol != null && !tickerSymbol.trim().isEmpty() && tickerSymbol.matches("[A-Z]{4}");
   }
 
   public static String getApiKey() {
