@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PortfolioManager {
+  // new api key
   private static final String API_KEY = "MYWEKXDOJ1DOGTIH"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
 
