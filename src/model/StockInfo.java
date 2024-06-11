@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StockInfo {
+public class StockInfo implements IStockInfo {
   private String companyName;
   private String tickerSymbol;
   private LocalDate stockDate;
@@ -27,18 +27,22 @@ public class StockInfo {
     this.quantity = quantity;
   }
 
+  @Override
   public String getCompanyName() {
     return companyName;
   }
 
+  @Override
   public String getTickerSymbol() {
     return tickerSymbol;
   }
 
+  @Override
   public LocalDate getStockDate() {
     return stockDate;
   }
 
+  @Override
   public int getQuantity() {
     return quantity;
   }

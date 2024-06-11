@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Portfolio {
   private String clientName;
-  private List<StockInfo> stockList;
+  private List<IStockInfo> stockList;
 
-  public Portfolio(String clientName, List<StockInfo> stockList) {
+  public Portfolio(String clientName, List<IStockInfo> stockList) {
     this.clientName = clientName;
     this.stockList = new ArrayList<>(stockList);
   }
@@ -19,27 +19,23 @@ public class Portfolio {
     return clientName;
   }
 
-  public List<StockInfo> getStockList() {
+  public List<IStockInfo> getStockList() {
     return stockList;
   }
 
-  public void addStock(StockInfo stock) {
+  public void addStock(IStockInfo stock) {
     stockList.add(stock);
   }
 
-  public double calculatePortfolioValue(LocalDate date) {
+  public double calculatePortfolioValue(LocalDate date, IModel model) {
     double totalValue = 0.0;
-    for (StockInfo stock : stockList) {
-      try {
-        totalValue += stock.getStockValueOnDate(date);
-      } catch (Exception e) {
-        System.err.println("Error fetching stock value for " + stock.getTickerSymbol() + " on " + date + ": " + e.getMessage());
-      }
+    for (IStockInfo stock : stockList) {
+      totalValue += stock.getQuantity() * model.fetchStockPrice(stock.getTickerSymbol(), date);
     }
     return totalValue;
   }
 
-  public void purchaseStock(StockInfo stock) {
+  public void purchaseStock(IStockInfo stock) {
     stockList.add(stock);
   }
 
@@ -47,9 +43,9 @@ public class Portfolio {
     stockList.remove(stock);
   }
 
-  public List<StockInfo> getComposition(LocalDate date) {
-    List<StockInfo> composition = new ArrayList<>();
-    for (StockInfo stock : stockList) {
+  public List<IStockInfo> getComposition(LocalDate date) {
+    List<IStockInfo> composition = new ArrayList<>();
+    for (IStockInfo stock : stockList) {
       if (!stock.getStockDate().isAfter(date)) {
         composition.add(stock);
       }

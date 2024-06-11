@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import model.IStockInfo;
 import model.MockStockInfo;
 import model.Portfolio;
-import model.StockInfo;
+import model.PortfolioManager;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +16,7 @@ public class PortfolioTest {
   private MockStockInfo stock1;
   private MockStockInfo stock2;
   private MockStockInfo stock3;
-  private MockStockInfo stockWithException;
+  private PortfolioManager portfolioManager;
 
   @Before
   public void setUp() {
@@ -23,8 +24,10 @@ public class PortfolioTest {
     stock2 = new MockStockInfo("Google", "GOOG", "2023-06-02", 5, 2800.0);
     stock3 = new MockStockInfo("Tesla", "TSLA", "2023-06-03", 20, 700.0);
 
-    List<StockInfo> initialStocks = Arrays.asList(stock1, stock2);
+    List<IStockInfo> initialStocks = Arrays.asList(stock1, stock2);
     portfolio = new Portfolio("John Doe", initialStocks);
+
+    portfolioManager = new PortfolioManager();
   }
 
   @Test
@@ -37,7 +40,7 @@ public class PortfolioTest {
 
   @Test
   public void testGetStockList() {
-    List<StockInfo> stockList = portfolio.getStockList();
+    List<IStockInfo> stockList = portfolio.getStockList();
     assertEquals(2, stockList.size());
     assertTrue(stockList.contains(stock1));
     assertTrue(stockList.contains(stock2));
@@ -59,6 +62,6 @@ public class PortfolioTest {
 
     double expectedValue = (stock1.getQuantity() * applePrice) + (stock2.getQuantity() * googlePrice);
 
-    assertEquals(expectedValue, portfolio.calculatePortfolioValue(date), 0.01);
+    assertEquals(expectedValue, portfolio.calculatePortfolioValue(date, portfolioManager), 0.01);
   }
 }

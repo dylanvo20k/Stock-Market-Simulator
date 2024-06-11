@@ -68,6 +68,19 @@ public class PortfolioManager implements IModel {
     }
   }
 
+  @Override
+  public double fetchStockPrice(String tickerSymbol, LocalDate date) {
+    try {
+      List<Double> closingPrices = fetchClosingPrices(tickerSymbol, date, date);
+      if (closingPrices.isEmpty()) {
+        throw new IllegalArgumentException("No stock price found for the given date.");
+      }
+      return closingPrices.get(0);
+    } catch (IOException e) {
+      throw new RuntimeException("Error fetching stock prices: " + e.getMessage());
+    }
+  }
+
   private List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
     String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
     URL url = new URL(apiUrl);

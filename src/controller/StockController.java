@@ -107,7 +107,7 @@ public class StockController implements IController {
     String dateStr = scanner.next();
     LocalDate date = LocalDate.parse(dateStr);
 
-    double totalValue = portfolio.calculatePortfolioValue(date);
+    double totalValue = portfolio.calculatePortfolioValue(date, portfolioManager);
     System.out.println("Total portfolio value on " + date + ": " + totalValue);
   }
 
