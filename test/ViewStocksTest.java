@@ -51,7 +51,7 @@ public class ViewStocksTest {
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outContent));
 
-    Portfolio portfolio = new Portfolio("John Doe", new ArrayList<>()); // Initialize with a non-null list
+    Portfolio portfolio = new Portfolio("John Doe", new ArrayList<>());
     String date = "2024-06-05";
     double value = 1000.0;
 
