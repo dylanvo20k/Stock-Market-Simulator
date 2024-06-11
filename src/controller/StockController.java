@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class StockController {
+public class StockController implements IController {
   private PortfolioManager portfolioManager;
   private List<Portfolio> portfolios;
 
@@ -19,6 +19,7 @@ public class StockController {
     portfolios = new ArrayList<>();
   }
 
+  @Override
   public void start() {
     Scanner scanner = new Scanner(System.in);
     while (true) {
