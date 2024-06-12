@@ -1,7 +1,6 @@
 package view;
 
 import java.util.Scanner;
-
 import model.Portfolio;
 import model.StockInfo;
 
@@ -15,11 +14,13 @@ public class ViewStocks implements IView {
   @Override
   public void displayMenu() {
     System.out.println("Stocks Menu");
-    System.out.println("1. Examine gain or loss of a stock over a specified period.");
-    System.out.println("2. Examine x-day moving average of a stock for a specified date.");
-    System.out.println("3. Determine x-day crossovers for a specified stock.");
-    System.out.println("4. Create a portfolio and find its value on a specific date.");
-    System.out.println("5. Exit.");
+    System.out.println("1. Create a portfolio.");
+    System.out.println("2. Add stock to a portfolio.");
+    System.out.println("3. Calculate portfolio value.");
+    System.out.println("4. Calculate moving day average.");
+    System.out.println("5. Detect x-day crossovers.");
+    System.out.println("6. Calculate gain or loss.");
+    System.out.println("7. Exit.");
   }
 
   @Override

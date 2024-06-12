@@ -32,7 +32,10 @@ public class StockController implements IController {
       System.out.println("6. Get Portfolio Value Distribution");
       System.out.println("7. Save Portfolio to File");
       System.out.println("8. Load Portfolio from File");
-      System.out.println("9. Exit");
+      System.out.println("9. Calculate Moving Day Average");
+      System.out.println("10. Detect Crossovers");
+      System.out.println("11. Calculate Gain or Loss");
+      System.out.println("12. Exit");
       System.out.print("Enter your choice: ");
       int choice = scanner.nextInt();
 
@@ -62,6 +65,15 @@ public class StockController implements IController {
           loadPortfolioFromFile(scanner);
           break;
         case 9:
+          calculateMovingDayAverage(scanner);
+          break;
+        case 10:
+          detectCrossovers(scanner);
+          break;
+        case 11:
+          calculateGainOrLoss(scanner);
+          break;
+        case 12:
           System.exit(0);
           break;
         default:
@@ -73,7 +85,7 @@ public class StockController implements IController {
   private void createPortfolio(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = new Portfolio(clientName);
+    Portfolio portfolio = new Portfolio(clientName, new ArrayList<>());
     portfolios.add(portfolio);
     System.out.println("Portfolio created successfully.");
   }
@@ -183,7 +195,6 @@ public class StockController implements IController {
       System.out.println("Portfolio not found!");
       return;
     }
-
     System.out.print("Enter file name: ");
     String fileName = scanner.next();
     portfolio.saveToFile(fileName);
@@ -202,6 +213,50 @@ public class StockController implements IController {
     }
   }
 
+  private void calculateMovingDayAverage(Scanner scanner) {
+    System.out.print("Enter ticker symbol: ");
+    String tickerSymbol = scanner.next();
+    System.out.print("Enter number of days: ");
+    int days = scanner.nextInt();
+    System.out.print("Enter end date (YYYY-MM-DD): ");
+    String endDateStr = scanner.next();
+    LocalDate endDate = LocalDate.parse(endDateStr);
+    double movingAverage = portfolioManager.calculateMovingDayAverage(tickerSymbol, days, endDate);
+    System.out.println("Moving day average: " + movingAverage);
+  }
+
+  private void detectCrossovers(Scanner scanner) {
+    System.out.print("Enter ticker symbol: ");
+    String tickerSymbol = scanner.next();
+    System.out.print("Enter number of days: ");
+    int days = scanner.nextInt();
+    System.out.print("Enter start date (YYYY-MM-DD): ");
+    String startDateStr = scanner.next();
+    LocalDate startDate = LocalDate.parse(startDateStr);
+    System.out.print("Enter end date (YYYY-MM-DD): ");
+    String endDateStr = scanner.next();
+    LocalDate endDate = LocalDate.parse(endDateStr);
+    List<LocalDate> crossovers = portfolioManager.detectCrossovers(tickerSymbol, days, startDate, endDate);
+    System.out.println("Crossovers detected on: " + crossovers);
+  }
+
+  private void calculateGainOrLoss(Scanner scanner) {
+    System.out.print("Enter ticker symbol: ");
+    String tickerSymbol = scanner.next();
+    System.out.print("Enter start date (YYYY-MM-DD): ");
+    String startDateStr = scanner.next();
+    LocalDate startDate = LocalDate.parse(startDateStr);
+    System.out.print("Enter end date (YYYY-MM-DD): ");
+    String endDateStr = scanner.next();
+    LocalDate endDate = LocalDate.parse(endDateStr);
+    try {
+      double gainOrLoss = portfolioManager.calculateGainOrLoss(tickerSymbol, startDate, endDate);
+      System.out.printf("Gain or Loss from %s to %s: %.2f%%\n", startDate, endDate, gainOrLoss);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
+  }
+
   private Portfolio findPortfolioByClientName(String clientName) {
     for (Portfolio portfolio : portfolios) {
       if (portfolio.getClientName().equals(clientName)) {
@@ -211,3 +266,5 @@ public class StockController implements IController {
     return null;
   }
 }
+
+

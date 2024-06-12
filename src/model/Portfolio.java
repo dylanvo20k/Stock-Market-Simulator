@@ -9,9 +9,9 @@ public class Portfolio {
   private String clientName;
   private List<IStockInfo> stockList;
 
-  public Portfolio(String clientName) {
+  public Portfolio(String clientName, List<IStockInfo> initialStocks) {
     this.clientName = clientName;
-    this.stockList = new ArrayList<>();
+    this.stockList = initialStocks;
   }
 
   public String getClientName() {
@@ -23,7 +23,7 @@ public class Portfolio {
   }
 
   public void sellStock(IStockInfo stock) {
-   stockList.remove(stock);
+    stockList.add(new StockInfo(stock.getCompanyName(), stock.getTickerSymbol(), stock.getStockDate().toString(), -stock.getQuantity()));
   }
 
   public Map<String, Integer> getComposition(LocalDate date) {
@@ -63,13 +63,14 @@ public class Portfolio {
   public static Portfolio loadFromFile(String fileName) {
     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
       String clientName = reader.readLine().split(":")[1];
-      Portfolio portfolio = new Portfolio(clientName);
+      List<IStockInfo> initialStocks = new ArrayList<>();
       String line;
       while ((line = reader.readLine()) != null) {
         String[] parts = line.split(",");
         IStockInfo stock = new StockInfo(parts[1], parts[0], parts[2], Integer.parseInt(parts[3]));
-        portfolio.addStock(stock);
+        initialStocks.add(stock);
       }
+      Portfolio portfolio = new Portfolio(clientName, initialStocks);
       return portfolio;
     } catch (IOException e) {
       e.printStackTrace();
