@@ -1,14 +1,12 @@
 package controller;
 
+import model.IStockInfo;
 import model.Portfolio;
 import model.PortfolioManager;
 import model.StockInfo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class StockController implements IController {
   private PortfolioManager portfolioManager;
@@ -35,7 +33,8 @@ public class StockController implements IController {
       System.out.println("9. Calculate Moving Day Average");
       System.out.println("10. Detect Crossovers");
       System.out.println("11. Calculate Gain or Loss");
-      System.out.println("12. Exit");
+      System.out.println("12. Rebalance Portfolio");
+      System.out.println("13. Exit");
       System.out.print("Enter your choice: ");
       int choice = scanner.nextInt();
 
@@ -74,6 +73,9 @@ public class StockController implements IController {
           calculateGainOrLoss(scanner);
           break;
         case 12:
+          rebalancePortfolio(scanner);
+          break;
+        case 13:
           System.exit(0);
           break;
         default:
@@ -85,7 +87,8 @@ public class StockController implements IController {
   private void createPortfolio(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = new Portfolio(clientName, new ArrayList<>());
+    List<IStockInfo> initialStocks = new ArrayList<>();
+    Portfolio portfolio = new Portfolio(clientName, initialStocks);
     portfolios.add(portfolio);
     System.out.println("Portfolio created successfully.");
   }
@@ -129,10 +132,16 @@ public class StockController implements IController {
     System.out.print("Enter quantity: ");
     int quantity = scanner.nextInt();
 
-    StockInfo stockInfo = new StockInfo("", tickerSymbol, stockDate, -quantity);
-    portfolio.sellStock(stockInfo);
-    System.out.println("Stock sold successfully.");
+    LocalDate date = LocalDate.parse(stockDate);
+
+    try {
+      portfolio.sellStock(tickerSymbol, date, quantity);
+      System.out.println("Stock sold successfully.");
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error: " + e.getMessage());
+    }
   }
+
 
   private void calculatePortfolioValue(Scanner scanner) {
     System.out.print("Enter client name: ");
@@ -257,6 +266,59 @@ public class StockController implements IController {
     }
   }
 
+  private void rebalancePortfolio(Scanner scanner) {
+    System.out.print("Enter client name: ");
+    String clientName = scanner.next();
+    Portfolio portfolio = findPortfolioByClientName(clientName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found!");
+      return;
+    }
+
+    System.out.print("Enter rebalancing date (YYYY-MM-DD): ");
+    String rebalanceDateStr = scanner.next();
+    LocalDate rebalanceDate = LocalDate.parse(rebalanceDateStr);
+
+    System.out.println("Enter the target allocation percentages for each stock (ticker symbol and percentage, separated by spaces): ");
+    Map<String, Double> targetAllocation = new HashMap<>();
+    while (scanner.hasNext()) {
+      String ticker = scanner.next();
+      if (ticker.equals("done")) break;
+      double percentage = scanner.nextDouble();
+      targetAllocation.put(ticker, percentage);
+    }
+
+    Map<String, Integer> composition = portfolio.getComposition(rebalanceDate);
+    Map<String, Double> valueDistribution = portfolio.getValueDistribution(rebalanceDate, portfolioManager);
+
+    double totalValue = valueDistribution.values().stream().mapToDouble(Double::doubleValue).sum();
+
+    Map<String, Double> intendedValues = new HashMap<>();
+    targetAllocation.forEach((ticker, percentage) -> intendedValues.put(ticker, totalValue * percentage / 100.0));
+
+    for (Map.Entry<String, Double> entry : intendedValues.entrySet()) {
+      String tickerSymbol = entry.getKey();
+      double intendedValue = entry.getValue();
+      int currentQuantity = composition.getOrDefault(tickerSymbol, 0);
+      double currentValue = valueDistribution.getOrDefault(tickerSymbol, 0.0);
+
+      if (currentValue > intendedValue) {
+        int sellQuantity = (int) ((currentValue - intendedValue) / portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate));
+        IStockInfo sellingStock = new StockInfo("", tickerSymbol, rebalanceDate.toString(), sellQuantity);
+        portfolio.sellStock(sellingStock.getTickerSymbol(), rebalanceDate, sellQuantity);
+        System.out.println("Sold " + sellQuantity + " shares of " + tickerSymbol + " to rebalance the portfolio.");
+      } else if (currentValue < intendedValue) {
+        double stockPrice = portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate);
+        int buyQuantity = (int) ((intendedValue - currentValue) / stockPrice);
+        portfolio.addStock(new StockInfo("", tickerSymbol, rebalanceDate.toString(), buyQuantity));
+        System.out.println("Bought " + buyQuantity + " shares of " + tickerSymbol + " to rebalance the portfolio.");
+      }
+    }
+
+    System.out.println("Portfolio rebalanced successfully.");
+  }
+
+
   private Portfolio findPortfolioByClientName(String clientName) {
     for (Portfolio portfolio : portfolios) {
       if (portfolio.getClientName().equals(clientName)) {
@@ -266,5 +328,3 @@ public class StockController implements IController {
     return null;
   }
 }
-
-

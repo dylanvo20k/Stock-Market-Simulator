@@ -47,6 +47,11 @@ public class StockInfo implements IStockInfo {
     return quantity;
   }
 
+  @Override
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
   public double getStockValueOnDate(LocalDate date) {
     try {
       double priceOnDate = fetchStockPriceOnDate(date);

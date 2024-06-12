@@ -7,4 +7,5 @@ public interface IStockInfo {
   String getTickerSymbol();
   LocalDate getStockDate();
   int getQuantity();
+  void setQuantity(int quantity);
 }

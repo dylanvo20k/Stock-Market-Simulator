@@ -22,8 +22,27 @@ public class Portfolio {
     stockList.add(stock);
   }
 
-  public void sellStock(IStockInfo stock) {
-    stockList.add(new StockInfo(stock.getCompanyName(), stock.getTickerSymbol(), stock.getStockDate().toString(), -stock.getQuantity()));
+  public void sellStock(String tickerSymbol, LocalDate date, int quantity) {
+    List<IStockInfo> stocksToSell = stockList.stream()
+            .filter(stock -> stock.getTickerSymbol().equals(tickerSymbol) && !stock.getStockDate().isAfter(date))
+            .collect(Collectors.toList());
+
+    int remainingQuantity = quantity;
+    for (IStockInfo stock : stocksToSell) {
+      int stockQuantity = stock.getQuantity();
+      if (stockQuantity > remainingQuantity) {
+        stock.setQuantity(stockQuantity - remainingQuantity);
+        remainingQuantity = 0;
+        break;
+      } else {
+        remainingQuantity -= stockQuantity;
+        stockList.remove(stock);
+      }
+    }
+
+    if (remainingQuantity > 0) {
+      throw new IllegalArgumentException("Not enough shares to sell.");
+    }
   }
 
   public Map<String, Integer> getComposition(LocalDate date) {
