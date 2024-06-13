@@ -1,5 +1,6 @@
 package controller;
 
+import model.IModel;
 import model.IStockInfo;
 import model.Portfolio;
 import model.PortfolioManager;
@@ -34,7 +35,8 @@ public class StockController implements IController {
       System.out.println("10. Detect Crossovers");
       System.out.println("11. Calculate Gain or Loss");
       System.out.println("12. Rebalance Portfolio");
-      System.out.println("13. Exit");
+      System.out.println("13. View portfolio performance chart");
+      System.out.println("14. Exit");
       System.out.print("Enter your choice: ");
       int choice = scanner.nextInt();
 
@@ -76,6 +78,8 @@ public class StockController implements IController {
           rebalancePortfolio(scanner);
           break;
         case 13:
+          viewPortfolioPerformanceChart(scanner);
+        case 14:
           System.exit(0);
           break;
         default:
@@ -318,7 +322,6 @@ public class StockController implements IController {
     System.out.println("Portfolio rebalanced successfully.");
   }
 
-
   private Portfolio findPortfolioByClientName(String clientName) {
     for (Portfolio portfolio : portfolios) {
       if (portfolio.getClientName().equals(clientName)) {
@@ -326,5 +329,27 @@ public class StockController implements IController {
       }
     }
     return null;
+  }
+
+  private void viewPortfolioPerformanceChart(Scanner scanner) {
+    System.out.print("Enter client name: ");
+    String clientName = scanner.next();
+    Portfolio portfolio = findPortfolioByClientName(clientName);
+    if (portfolio == null) {
+      System.out.println("Portfolio not found!");
+      return;
+    }
+
+    System.out.print("Enter start date (YYYY-MM-DD): ");
+    String startDateStr = scanner.next();
+    LocalDate startDate = LocalDate.parse(startDateStr);
+
+    System.out.print("Enter end date (YYYY-MM-DD): ");
+    String endDateStr = scanner.next();
+    LocalDate endDate = LocalDate.parse(endDateStr);
+
+    IModel model = portfolioManager;
+
+    portfolio.generatePerformanceChart(startDate, endDate, model);
   }
 }

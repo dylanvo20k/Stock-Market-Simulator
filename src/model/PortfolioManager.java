@@ -72,10 +72,12 @@ public class PortfolioManager implements IModel {
   public double fetchStockPrice(String tickerSymbol, LocalDate date) {
     try {
       List<Double> closingPrices = fetchClosingPrices(tickerSymbol, date, date);
+
       if (closingPrices.isEmpty()) {
-        throw new IllegalArgumentException("No stock price found for the given date.");
+        return -1; // Or any other special value to indicate no price found
       }
-      return closingPrices.get(0);
+
+      return closingPrices.get(0); // Return the first (and only) element
     } catch (IOException e) {
       throw new RuntimeException("Error fetching stock prices: " + e.getMessage());
     }

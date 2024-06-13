@@ -2,6 +2,7 @@ package model;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,5 +96,42 @@ public class Portfolio {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public void generatePerformanceChart(LocalDate startDate, LocalDate endDate, IModel model) {
+    System.out.println("Performance of portfolio " + clientName + " from " + startDate + " to " + endDate);
+
+    Map<LocalDate, Double> monthlyValues = new HashMap<>();
+
+    LocalDate currentMonth = LocalDate.of(startDate.getYear(), startDate.getMonth(), 1);
+
+    while (!currentMonth.isAfter(endDate)) {
+      LocalDate lastDayOfMonth = currentMonth.withDayOfMonth(currentMonth.lengthOfMonth());
+      double portfolioValue = calculatePortfolioValue(lastDayOfMonth, model);
+      monthlyValues.put(lastDayOfMonth, portfolioValue);
+      currentMonth = currentMonth.plusMonths(1);
+    }
+
+    double maxPortfolioValue = 0.0;
+    for (double value : monthlyValues.values()) {
+      if (value > maxPortfolioValue) {
+        maxPortfolioValue = value;
+      }
+    }
+
+    int maxAsterisks = 50;
+
+    for (Map.Entry<LocalDate, Double> entry : monthlyValues.entrySet()) {
+      LocalDate month = entry.getKey();
+      double value = entry.getValue();
+
+      int numAsterisks = (int) (value / maxPortfolioValue * maxAsterisks);
+
+      String formattedMonth = month.format(DateTimeFormatter.ofPattern("MMM yyyy"));
+
+      System.out.printf("%s: %s\n", formattedMonth, "*".repeat(numAsterisks));
+    }
+
+    System.out.printf("\nScale: * = %.2f\n", maxPortfolioValue / maxAsterisks);
   }
 }
