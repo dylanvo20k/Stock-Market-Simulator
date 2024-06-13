@@ -79,6 +79,7 @@ public class StockController implements IController {
           break;
         case 13:
           viewPortfolioPerformanceChart(scanner);
+          break;
         case 14:
           System.exit(0);
           break;
