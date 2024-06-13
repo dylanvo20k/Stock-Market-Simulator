@@ -2,7 +2,10 @@ package controller;
 
 import model.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class StockController implements IController {
   private PortfolioManager portfolioManager;
@@ -502,28 +505,89 @@ public class StockController implements IController {
       return;
     }
 
-    int startYear, startMonth, startDay, endYear, endMonth, endDay;
-    try {
-      System.out.print("Enter start date year (YYYY): ");
-      startYear = scanner.nextInt();
-      System.out.print("Enter start date month (MM): ");
-      startMonth = scanner.nextInt();
-      System.out.print("Enter start date day (DD): ");
-      startDay = scanner.nextInt();
-      System.out.print("Enter end date year (YYYY): ");
-      endYear = scanner.nextInt();
-      System.out.print("Enter end date month (MM): ");
-      endMonth = scanner.nextInt();
-      System.out.print("Enter end date day (DD): ");
-      endDay = scanner.nextInt();
-      LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
-      LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+    System.out.print("Enter start year: ");
+    int startYear = scanner.nextInt();
+    System.out.print("Enter start month: ");
+    int startMonth = scanner.nextInt();
+    System.out.print("Enter start day: ");
+    int startDay = scanner.nextInt();
+    LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
 
-      IModel model = portfolioManager;
-      portfolio.generatePerformanceChart(startDate, endDate, model);
-    } catch (Exception e) {
-      System.out.println("Error: Invalid date format or values.");
+    System.out.print("Enter end year: ");
+    int endYear = scanner.nextInt();
+    System.out.print("Enter end month: ");
+    int endMonth = scanner.nextInt();
+    System.out.print("Enter end day: ");
+    int endDay = scanner.nextInt();
+    LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+
+    IModel model = portfolioManager;
+
+    List<LocalDate> timestamps = generateTimestamps(startDate, endDate);
+
+    List<Double> values = new ArrayList<>();
+    for (LocalDate date : timestamps) {
+      double value = portfolio.calculatePortfolioValue(date, model);
+      values.add(value);
     }
+
+    double minValue = Collections.min(values);
+    double maxValue = Collections.max(values);
+    double range = maxValue - minValue;
+
+    int maxAsterisks = 50;
+    double valuePerAsterisk = range / maxAsterisks;
+
+    System.out.println("Portfolio Performance Chart:");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    for (int i = 0; i < timestamps.size(); i++) {
+      LocalDate date = timestamps.get(i);
+      double value = values.get(i);
+      int asterisksCount = (int) ((value - minValue) / valuePerAsterisk);
+      String asterisks = "*".repeat(asterisksCount);
+      System.out.printf("%s | %s\n", dateFormatter.format(date), asterisks);
+    }
+
+    System.out.printf("Scale: Each asterisk represents %.2f units of value.\n", valuePerAsterisk);
+  }
+
+  private List<LocalDate> generateTimestamps(LocalDate startDate, LocalDate endDate) {
+    long daysBetween = DAYS.between(startDate, endDate);
+
+    List<LocalDate> timestamps = new ArrayList<>();
+
+    if (daysBetween <= 30) {
+      // Daily intervals
+      LocalDate currentDate = startDate;
+      while (!currentDate.isAfter(endDate)) {
+        timestamps.add(currentDate);
+        currentDate = currentDate.plusDays(1);
+      }
+    } else if (daysBetween <= 210) {
+      // Weekly intervals
+      LocalDate currentDate = startDate;
+      while (!currentDate.isAfter(endDate)) {
+        timestamps.add(currentDate);
+        currentDate = currentDate.plusWeeks(1);
+      }
+    } else if (daysBetween <= 900) {
+      // Monthly intervals
+      LocalDate currentDate = startDate.withDayOfMonth(1);
+      while (!currentDate.isAfter(endDate)) {
+        timestamps.add(currentDate);
+        currentDate = currentDate.plusMonths(1);
+      }
+    } else {
+      // Yearly intervals
+      LocalDate currentDate = startDate.withDayOfYear(1);
+      while (!currentDate.isAfter(endDate)) {
+        timestamps.add(currentDate);
+        currentDate = currentDate.plusYears(1);
+      }
+    }
+
+    return timestamps;
   }
 
   private boolean isWholeNumber(int amount) {
