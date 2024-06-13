@@ -64,4 +64,9 @@ public class StockInfoTest {
 
     stockInfo.getStockValueOnDate(testDate);
   }
+  @Test
+  public void testSetQuantity() {
+    stockInfo.setQuantity(3);
+    assertEquals(3, stockInfo.getQuantity());
+  }
 }

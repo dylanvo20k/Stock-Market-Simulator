@@ -83,7 +83,8 @@ public class PortfolioManager implements IModel {
     }
   }
 
-  private List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
+  @Override
+  public List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException {
     String apiUrl = String.format(API_URL_TEMPLATE, tickerSymbol, API_KEY);
     URL url = new URL(apiUrl);
     BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -102,7 +103,7 @@ public class PortfolioManager implements IModel {
 
     try (InputStream in = url.openStream()) {
       int b;
-      while ((b = in.read()) != - 1) {
+      while ((b = in.read()) != -1) {
         output.append((char) b);
       }
     } catch (IOException e) {

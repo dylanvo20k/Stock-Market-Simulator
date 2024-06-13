@@ -134,4 +134,7 @@ public class Portfolio {
 
     System.out.printf("\nScale: * = %.2f\n", maxPortfolioValue / maxAsterisks);
   }
+  public List<IStockInfo> getStockList() {
+    return new ArrayList<>(stockList);  // Return a copy to prevent modification
+  }
 }

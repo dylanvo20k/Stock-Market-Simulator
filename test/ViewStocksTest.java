@@ -66,7 +66,6 @@ public class ViewStocksTest {
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outContent));
 
-    // Use a valid ticker symbol for the test
     StockInfo stock = new StockInfo("Company A", "AAPL", "2024-06-01", 10);
     String startDate = "2024-06-01";
     String endDate = "2024-06-05";
@@ -76,6 +75,4 @@ public class ViewStocksTest {
 
     assertEquals("Stock information for AAPL (Company A) from 2024-06-01 to 2024-06-05\n", outContent.toString());
   }
-
-  // You can add similar tests for other methods such as displayMessage, getUserInput, etc.
 }
