@@ -224,10 +224,12 @@ public class StockController implements IController {
       System.out.print("Enter date day (DD): ");
       day = scanner.nextInt();
       LocalDate date = LocalDate.of(year, month, day);
+
       double totalValue = portfolio.calculatePortfolioValue(date, portfolioManager);
-      System.out.println("Total portfolio value on " + date + ": " + totalValue);
-    } catch (Exception e) {
+      System.out.println("Total portfolio value on " + date + ": " + "$" + totalValue);
+    } catch (IllegalArgumentException e) {
       System.out.println("Error: Invalid date format or values.");
+      scanner.nextLine();
     }
   }
 
@@ -312,8 +314,21 @@ public class StockController implements IController {
   private void calculateMovingDayAverage(Scanner scanner) {
     System.out.print("Enter ticker symbol: ");
     String tickerSymbol = scanner.next();
-    System.out.print("Enter number of days: ");
-    int days = scanner.nextInt();
+
+    int days;
+    try {
+      System.out.print("Enter number of days: ");
+      days = scanner.nextInt();
+      if (days <= 0) {
+        System.out.println("Error: Number of days must be greater than zero.");
+        return;
+      }
+    } catch (InputMismatchException e) {
+      System.out.println("Error: Invalid input format. Please enter a valid number for days.");
+      scanner.nextLine(); // Clear the scanner buffer
+      return;
+    }
+
     int year, month, day;
     try {
       System.out.print("Enter end date year (YYYY): ");
@@ -323,18 +338,33 @@ public class StockController implements IController {
       System.out.print("Enter end date day (DD): ");
       day = scanner.nextInt();
       LocalDate endDate = LocalDate.of(year, month, day);
+
       double movingAverage = portfolioManager.calculateMovingDayAverage(tickerSymbol, days, endDate);
-      System.out.println("Moving day average: " + movingAverage);
-    } catch (Exception e) {
+      System.out.printf("Moving %d-day average for %s ending on %s: %.2f\n", days, tickerSymbol, endDate, movingAverage);
+    } catch (IllegalArgumentException e) {
       System.out.println("Error: Invalid date format or values.");
+      scanner.nextLine();
     }
   }
 
   private void detectCrossovers(Scanner scanner) {
     System.out.print("Enter ticker symbol: ");
     String tickerSymbol = scanner.next();
-    System.out.print("Enter number of days: ");
-    int days = scanner.nextInt();
+
+    int days;
+    try {
+      System.out.print("Enter number of days: ");
+      days = scanner.nextInt();
+      if (days <= 0) {
+        System.out.println("Error: Number of days must be greater than zero.");
+        return;
+      }
+    } catch (InputMismatchException e) {
+      System.out.println("Error: Invalid input format. Please enter a valid number for days.");
+      scanner.nextLine();
+      return;
+    }
+
     int startYear, startMonth, startDay, endYear, endMonth, endDay;
     try {
       System.out.print("Enter start date year (YYYY): ");
@@ -343,20 +373,29 @@ public class StockController implements IController {
       startMonth = scanner.nextInt();
       System.out.print("Enter start date day (DD): ");
       startDay = scanner.nextInt();
+      LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
+
       System.out.print("Enter end date year (YYYY): ");
       endYear = scanner.nextInt();
       System.out.print("Enter end date month (MM): ");
       endMonth = scanner.nextInt();
       System.out.print("Enter end date day (DD): ");
       endDay = scanner.nextInt();
-      LocalDate startDate = LocalDate.of(startYear, startMonth, startDay);
       LocalDate endDate = LocalDate.of(endYear, endMonth, endDay);
+
+      if (startDate.isAfter(endDate)) {
+        System.out.println("Error: Start date must be before end date.");
+        return;
+      }
+
       List<LocalDate> crossovers = portfolioManager.detectCrossovers(tickerSymbol, days, startDate, endDate);
       System.out.println("Crossovers detected on: " + crossovers);
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       System.out.println("Error: Invalid date format or values.");
+      scanner.nextLine();
     }
   }
+
 
   private void calculateGainOrLoss(Scanner scanner) {
     System.out.print("Enter ticker symbol: ");
