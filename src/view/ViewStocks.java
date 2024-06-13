@@ -1,6 +1,7 @@
 package view;
 
 import java.util.Scanner;
+
 import model.Portfolio;
 import model.StockInfo;
 
