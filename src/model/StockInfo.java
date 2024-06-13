@@ -95,4 +95,5 @@ public class StockInfo implements IStockInfo {
   public static String getApiKey() {
     return API_KEY;
   }
+
 }

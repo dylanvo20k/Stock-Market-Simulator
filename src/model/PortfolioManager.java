@@ -201,5 +201,6 @@ public class PortfolioManager implements IModel {
     }
 
     return stockPrices;
+
   }
 }

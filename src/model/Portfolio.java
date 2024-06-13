@@ -136,5 +136,6 @@ public class Portfolio {
   }
   public List<IStockInfo> getStockList() {
     return new ArrayList<>(stockList);  // Return a copy to prevent modification
+
   }
 }

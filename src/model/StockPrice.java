@@ -36,4 +36,5 @@ public class StockPrice {
   public LocalDate getDate() {
     return date;
   }
+  
 }

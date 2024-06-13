@@ -44,4 +44,5 @@ public class StockPriceTest {
   public void testGetDate() {
     assertEquals(date, stockPrice.getDate());
   }
+
 }

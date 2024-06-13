@@ -138,5 +138,6 @@ public class PortfolioTest {
 
     assertEquals(expectedOutput, outContent.toString());
     System.setOut(System.out);
+
   }
 }

@@ -51,6 +51,7 @@ public class PortfolioManagerTest {
     LocalDate endDate = LocalDate.of(2023, 6, 1);
     List<Double> closingPrices = portfolioManager.fetchClosingPrices("AAPL", startDate, endDate);
     assertEquals(104, closingPrices.size());
+
   }
 
 }

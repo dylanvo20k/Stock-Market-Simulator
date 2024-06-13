@@ -74,5 +74,6 @@ public class ViewStocksTest {
     viewStocks.displayStockInfo(stock, startDate, endDate);
 
     assertEquals("Stock information for AAPL (Company A) from 2024-06-01 to 2024-06-05\n", outContent.toString());
+
   }
 }
