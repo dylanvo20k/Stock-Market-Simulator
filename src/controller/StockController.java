@@ -10,9 +10,11 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class StockController implements IController {
   private PortfolioManager portfolioManager;
   private List<Portfolio> portfolios;
+  private IStockFetcher stockFetcher;
 
   public StockController() {
-    portfolioManager = new PortfolioManager();
+    stockFetcher = new AlphaVantageAPI();
+    portfolioManager = new PortfolioManager(stockFetcher);
     portfolios = new ArrayList<>();
   }
 
@@ -25,12 +27,7 @@ public class StockController implements IController {
       System.out.println("2. Manage Portfolio");
       System.out.println("3. Save Portfolio to File");
       System.out.println("4. Load Portfolio from File");
-      System.out.println("5. Calculate Moving Day Average");
-      System.out.println("6. Detect Crossovers");
-      System.out.println("7. Calculate Gain or Loss");
-      System.out.println("8. Rebalance Portfolio");
-      System.out.println("9. View portfolio performance chart");
-      System.out.println("10. Exit");
+      System.out.println("5. Exit");
       System.out.print("Enter your choice: ");
       int choice = scanner.nextInt();
 
@@ -48,21 +45,6 @@ public class StockController implements IController {
           loadPortfolioFromFile(scanner);
           break;
         case 5:
-          calculateMovingDayAverage(scanner);
-          break;
-        case 6:
-          detectCrossovers(scanner);
-          break;
-        case 7:
-          calculateGainOrLoss(scanner);
-          break;
-        case 8:
-          rebalancePortfolio(scanner);
-          break;
-        case 9:
-          viewPortfolioPerformanceChart(scanner);
-          break;
-        case 10:
           System.exit(0);
           break;
         default:
@@ -445,7 +427,7 @@ public class StockController implements IController {
       day = scanner.nextInt();
       LocalDate rebalanceDate = LocalDate.of(year, month, day);
 
-      System.out.println("Enter the target allocation percentages for each stock (ticker symbol and percentage, separated by spaces): ");
+      System.out.println("Enter the stock and weight percentages for each stock followed by 'done' (i.e GOOG 20 done): ");
       Map<String, Double> targetAllocation = new HashMap<>();
       while (scanner.hasNext()) {
         String ticker = scanner.next();
@@ -549,7 +531,7 @@ public class StockController implements IController {
       System.out.printf("%s | %s\n", dateFormatter.format(date), asterisks);
     }
 
-    System.out.printf("Scale: Each asterisk represents %.2f units of value.\n", valuePerAsterisk);
+    System.out.printf("Scale: Each asterisk represents %.2f dollars.\n", valuePerAsterisk);
   }
 
   private List<LocalDate> generateTimestamps(LocalDate startDate, LocalDate endDate) {

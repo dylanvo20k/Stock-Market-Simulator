@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Portfolio {
+public class Portfolio implements  IPortfolio {
   private String clientName;
   private List<IStockInfo> stockList;
 
@@ -15,14 +15,17 @@ public class Portfolio {
     this.stockList = initialStocks;
   }
 
+  @Override
   public String getClientName() {
     return clientName;
   }
 
+  @Override
   public void addStock(IStockInfo stock) {
     stockList.add(stock);
   }
 
+  @Override
   public void sellStock(String tickerSymbol, LocalDate date, int quantity) {
     List<IStockInfo> stocksToSell = stockList.stream()
             .filter(stock -> stock.getTickerSymbol().equals(tickerSymbol) && !stock.getStockDate().isAfter(date))
@@ -46,6 +49,7 @@ public class Portfolio {
     }
   }
 
+  @Override
   public Map<String, Integer> getComposition(LocalDate date) {
     return stockList.stream()
             .filter(stock -> !stock.getStockDate().isAfter(date))
@@ -55,12 +59,14 @@ public class Portfolio {
             ));
   }
 
+  @Override
   public double calculatePortfolioValue(LocalDate date, IModel model) {
     return getComposition(date).entrySet().stream()
             .mapToDouble(entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue())
             .sum();
   }
 
+  @Override
   public Map<String, Double> getValueDistribution(LocalDate date, IModel model) {
     return getComposition(date).entrySet().stream()
             .collect(Collectors.toMap(
@@ -69,6 +75,7 @@ public class Portfolio {
             ));
   }
 
+  @Override
   public void saveToFile(String fileName) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
       writer.write("clientName:" + clientName + "\n");
@@ -98,6 +105,7 @@ public class Portfolio {
     }
   }
 
+  @Override
   public void generatePerformanceChart(LocalDate startDate, LocalDate endDate, IModel model) {
     System.out.println("Performance of portfolio " + clientName + " from " + startDate + " to " + endDate);
 
@@ -134,8 +142,10 @@ public class Portfolio {
 
     System.out.printf("\nScale: * = %.2f\n", maxPortfolioValue / maxAsterisks);
   }
+
+  @Override
   public List<IStockInfo> getStockList() {
-    return new ArrayList<>(stockList);  // Return a copy to prevent modification
+    return new ArrayList<>(stockList);
 
   }
 }
