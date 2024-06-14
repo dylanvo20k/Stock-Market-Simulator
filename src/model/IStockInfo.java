@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * These methods include a stock's company name, ticker symbol, stock data, and quantity.
  * This interface is implemented by the StockInfo class.
  */
+// new interface
 public interface IStockInfo {
 
   /**

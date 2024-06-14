@@ -15,6 +15,7 @@ public interface IStockFetcher {
    * @return a list of closing prices in the specified date range.
    * @throws IOException if an I/O error occurs when fetching data from the Alpha Vantage API.
    */
+  // new interface
   List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException;
 
   /**

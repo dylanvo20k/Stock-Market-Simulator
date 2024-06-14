@@ -11,6 +11,7 @@ public interface IPortfolio {
    *
    * @return the client name
    */
+  // new interface
   String getClientName();
 
   /**

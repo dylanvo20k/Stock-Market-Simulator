@@ -9,6 +9,7 @@ import java.util.List;
  * These methods allow users to manage portfolios and analyze stock data using various techniques.
  * This interface is implemented by multiple classes for Portfolio, StockInfo, and Mocks.
  */
+// new interface
 public interface IModel {
 
   /**

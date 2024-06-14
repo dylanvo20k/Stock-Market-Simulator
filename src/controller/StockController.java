@@ -75,7 +75,7 @@ public class StockController implements IController {
     portfolios.add(portfolio);
     System.out.println("Portfolio created successfully.");
   }
-
+  // new helper method to revamp the display
   private void managePortfolio(Scanner scanner) {
     while (true) {
       System.out.println("Manage Portfolio:");

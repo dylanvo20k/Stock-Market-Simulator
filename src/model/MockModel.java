@@ -9,6 +9,7 @@ import java.util.Map;
  * This class is used as a mock implementation of the IModel interface for testing purposes.
  * It provides simulated stock price data and stub implementation for stock analysis methods.
  */
+// new mock class
 public class MockModel implements IModel {
 
   private Map<String, Map<LocalDate, Double>> stockPrices;

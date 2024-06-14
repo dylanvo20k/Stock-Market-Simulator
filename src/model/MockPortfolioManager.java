@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * A MockPortfolioManager class that serves as a mock test for testing our portfolio manager tests.
  */
+//new mock class
 public class MockPortfolioManager extends PortfolioManager {
   public MockPortfolioManager(IStockFetcher stockDataFetcher) {
     super(stockDataFetcher);

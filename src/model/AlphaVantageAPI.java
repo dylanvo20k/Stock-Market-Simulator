@@ -16,6 +16,7 @@ import java.util.Map;
  * This class provides methods to fetch closing prices for a given stock symbol over a specified date range,
  * as well as fetching the stock price for a specific date.
  */
+// new class which improves upon our previous hardcoded api.
 public class AlphaVantageAPI implements IStockFetcher {
   private static final String API_KEY = "MYWEKXDOJ1DOGTIH"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";

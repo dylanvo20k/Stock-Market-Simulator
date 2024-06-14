@@ -8,6 +8,7 @@ import java.util.Scanner;
  *
  * <p>It allows for testing user interaction without requiring actual user input/output.
  */
+// new mock class
 public class MockViewStocks extends ViewStocks {
   private final Scanner scanner;
   private final StringBuilder output;
