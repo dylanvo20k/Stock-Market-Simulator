@@ -12,11 +12,7 @@ public class ProgramRunner {
    * @param args  the arguments to run the program
    */
   public static void main(String[] args) {
-    PortfolioManager model = new PortfolioManager();
-    ViewStocks view = new ViewStocks();
     StockController app = new StockController();
-    app.setView(view);
-    app.setModel(model);
     app.start();
   }
 }

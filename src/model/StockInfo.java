@@ -40,51 +40,32 @@ public class StockInfo implements IStockInfo {
     this.stockDate = LocalDate.parse(stockDate);
     this.quantity = quantity;
   }
-  /**
-   * Retrieves the company name of a stock.
-   *
-   * @return the company name
-   */
+
   @Override
   public String getCompanyName() {
     return companyName;
   }
-  /**
-   * Retrieves the ticker symbol of a stock.
-   *
-   * @return the ticker symbol
-   */
+
   @Override
   public String getTickerSymbol() {
     return tickerSymbol;
   }
-  /**
-   * Retrieves the stock date associated with a stock.
-   *
-   * @return the stock date
-   */
+
   @Override
   public LocalDate getStockDate() {
     return stockDate;
   }
-  /**
-   * Retrieves the quantity of a stock.
-   *
-   * @return the quantity
-   */
+
   @Override
   public int getQuantity() {
     return quantity;
   }
-  /**
-   * Sets the quantity of a stock.
-   *
-   * @param quantity the new quantity
-   */
+
   @Override
   public void setQuantity(int quantity) {
     this.quantity = quantity;
   }
+
   /**
    * Calculates the value of this stock on a specific date based on its quantity and the closing
    * price.

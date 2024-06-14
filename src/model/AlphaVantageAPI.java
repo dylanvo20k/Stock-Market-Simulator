@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of the {@link IStockFetcher} interface that retrieves stock data from the Alpha Vantage API.
+ * This class provides methods to fetch closing prices for a given stock symbol over a specified date range,
+ * as well as fetching the stock price for a specific date.
+ */
 public class AlphaVantageAPI implements IStockFetcher {
   private static final String API_KEY = "MYWEKXDOJ1DOGTIH"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
@@ -58,9 +63,8 @@ public class AlphaVantageAPI implements IStockFetcher {
     List<Double> closingPrices = fetchClosingPrices(tickerSymbol, date, date);
 
     if (closingPrices.isEmpty()) {
-      return -1; // Or any other special value to indicate no price found
+      return -1;
     }
-
-    return closingPrices.get(0); // Return the first (and only) element
+    return closingPrices.get(0);
   }
 }
