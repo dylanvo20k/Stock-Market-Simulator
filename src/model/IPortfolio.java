@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AN interface which represents a portfolio. Has methods which can
+ * retrieve data related to portfolio(s).
+ */
 public interface IPortfolio {
 
   /**

@@ -1,6 +1,13 @@
 package controller;
 
-import model.*;
+
+import model.AlphaVantageAPI;
+import model.IModel;
+import model.IStockFetcher;
+import model.IStockInfo;
+import model.Portfolio;
+import model.PortfolioManager;
+import model.StockInfo;
 import view.ViewStocks;
 
 import java.time.LocalDate;
@@ -8,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+
 /**
  * This class implements the controller logic for managing stock portfolios.
  * It allows creating portfolios, managing stocks within portfolios, calculating various metrics,
@@ -16,20 +24,15 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class StockController implements IController {
   private PortfolioManager portfolioManager;
   private List<Portfolio> portfolios;
-  private IStockFetcher stockFetcher;
 
+  /**
+   * Constructs a StockController object, with a brand new portfolioManager, new portfolios,
+   * and sets up the API.
+   */
   public StockController() {
-    stockFetcher = new AlphaVantageAPI();
+    IStockFetcher stockFetcher = new AlphaVantageAPI();
     portfolioManager = new PortfolioManager(stockFetcher);
     portfolios = new ArrayList<>();
-  }
-
-  public void setModel(PortfolioManager model) {
-    // method used for main method
-  }
-
-  public void setView(ViewStocks view) {
-    // method used for main method
   }
 
   @Override
@@ -75,6 +78,7 @@ public class StockController implements IController {
     portfolios.add(portfolio);
     System.out.println("Portfolio created successfully.");
   }
+
   // new helper method to revamp the display
   private void managePortfolio(Scanner scanner) {
     while (true) {
@@ -145,7 +149,9 @@ public class StockController implements IController {
     String companyName = scanner.next();
     System.out.print("Enter ticker symbol: ");
     String tickerSymbol = scanner.next();
-    int year, month, day;
+    int year;
+    int month;
+    int day;
 
     try {
       System.out.print("Enter stock year (YYYY): ");
@@ -162,7 +168,8 @@ public class StockController implements IController {
         return;
       }
 
-      StockInfo stockInfo = new StockInfo(companyName, tickerSymbol, stockDate.toString(), quantity);
+      IStockInfo stockInfo = new StockInfo(companyName, tickerSymbol,
+              stockDate.toString(), quantity);
       portfolio.addStock(stockInfo);
       System.out.println("Stock added successfully.");
     } catch (Exception e) {
@@ -181,7 +188,9 @@ public class StockController implements IController {
 
     System.out.print("Enter ticker symbol: ");
     String tickerSymbol = scanner.next();
-    int year, month, day;
+    int year;
+    int month;
+    int day;
 
     try {
       System.out.print("Enter stock year (YYYY): ");
@@ -214,7 +223,9 @@ public class StockController implements IController {
       return;
     }
 
-    int year, month, day;
+    int year;
+    int month;
+    int day;
     try {
       System.out.print("Enter date year (YYYY): ");
       year = scanner.nextInt();
@@ -252,7 +263,8 @@ public class StockController implements IController {
       LocalDate date = LocalDate.of(year, month, day);
       Map<String, Integer> composition = portfolio.getComposition(date);
       System.out.println("Portfolio composition on " + date + ":");
-      composition.forEach((ticker, quantity) -> System.out.println(ticker + ": " + quantity + " shares"));
+      composition.forEach((ticker, quantity) ->
+              System.out.println(ticker + ": " + quantity + " shares"));
     } catch (Exception e) {
       System.out.println("Error: Invalid date format or values.");
     }
@@ -267,7 +279,9 @@ public class StockController implements IController {
       return;
     }
 
-    int year, month, day;
+    int year;
+    int month;
+    int day;
     try {
       System.out.print("Enter date year (YYYY): ");
       year = scanner.nextInt();
@@ -328,7 +342,9 @@ public class StockController implements IController {
       return;
     }
 
-    int year, month, day;
+    int year;
+    int month;
+    int day;
     try {
       System.out.print("Enter end date year (YYYY): ");
       year = scanner.nextInt();
@@ -338,8 +354,10 @@ public class StockController implements IController {
       day = scanner.nextInt();
       LocalDate endDate = LocalDate.of(year, month, day);
 
-      double movingAverage = portfolioManager.calculateMovingDayAverage(tickerSymbol, days, endDate);
-      System.out.printf("Moving %d-day average for %s ending on %s: %.2f\n", days, tickerSymbol, endDate, movingAverage);
+      double movingAverage = portfolioManager.
+              calculateMovingDayAverage(tickerSymbol, days, endDate);
+      System.out.printf("Moving %d-day average for %s ending on %s: %.2f\n",
+              days, tickerSymbol, endDate, movingAverage);
     } catch (IllegalArgumentException e) {
       System.out.println("Error: Invalid date format or values.");
       scanner.nextLine();
@@ -364,7 +382,12 @@ public class StockController implements IController {
       return;
     }
 
-    int startYear, startMonth, startDay, endYear, endMonth, endDay;
+    int startYear;
+    int startMonth;
+    int startDay;
+    int endYear;
+    int endMonth;
+    int endDay;
     try {
       System.out.print("Enter start date year (YYYY): ");
       startYear = scanner.nextInt();
@@ -387,7 +410,8 @@ public class StockController implements IController {
         return;
       }
 
-      List<LocalDate> crossovers = portfolioManager.detectCrossovers(tickerSymbol, days, startDate, endDate);
+      List<LocalDate> crossovers = portfolioManager
+              .detectCrossovers(tickerSymbol, days, startDate, endDate);
       System.out.println("Crossovers detected on: " + crossovers);
     } catch (IllegalArgumentException e) {
       System.out.println("Error: Invalid date format or values.");
@@ -399,7 +423,14 @@ public class StockController implements IController {
   private void calculateGainOrLoss(Scanner scanner) {
     System.out.print("Enter ticker symbol: ");
     String tickerSymbol = scanner.next();
-    int startYear, startMonth, startDay, endYear, endMonth, endDay;
+
+    int startYear;
+    int startMonth;
+    int startDay;
+    int endYear;
+    int endMonth;
+    int endDay;
+
     try {
       System.out.print("Enter start date year (YYYY): ");
       startYear = scanner.nextInt();
@@ -431,7 +462,9 @@ public class StockController implements IController {
       return;
     }
 
-    int year, month, day;
+    int year;
+    int month;
+    int day;
     try {
       System.out.print("Enter rebalancing date year (YYYY): ");
       year = scanner.nextInt();
@@ -441,22 +474,28 @@ public class StockController implements IController {
       day = scanner.nextInt();
       LocalDate rebalanceDate = LocalDate.of(year, month, day);
 
-      System.out.println("Enter the stock and weight percentages for each stock followed by 'done' (i.e GOOG 20 done): ");
+      System.out.println("Enter the stock and weight percentages " +
+              "for each stock followed by 'done' (i.e GOOG 20 done): ");
       Map<String, Double> targetAllocation = new HashMap<>();
       while (scanner.hasNext()) {
         String ticker = scanner.next();
-        if (ticker.equals("done")) break;
+        if (ticker.equals("done")) {
+          break;
+        }
         double percentage = scanner.nextDouble();
         targetAllocation.put(ticker, percentage);
       }
 
       Map<String, Integer> composition = portfolio.getComposition(rebalanceDate);
-      Map<String, Double> valueDistribution = portfolio.getValueDistribution(rebalanceDate, portfolioManager);
+      Map<String, Double> valueDistribution = portfolio
+              .getValueDistribution(rebalanceDate, portfolioManager);
 
-      double totalValue = valueDistribution.values().stream().mapToDouble(Double::doubleValue).sum();
+      double totalValue = valueDistribution.values().stream()
+              .mapToDouble(Double::doubleValue).sum();
 
       Map<String, Double> intendedValues = new HashMap<>();
-      targetAllocation.forEach((ticker, percentage) -> intendedValues.put(ticker, totalValue * percentage / 100.0));
+      targetAllocation.forEach((ticker, percentage) ->
+              intendedValues.put(ticker, totalValue * percentage / 100.0));
 
       for (Map.Entry<String, Double> entry : intendedValues.entrySet()) {
         String tickerSymbol = entry.getKey();
@@ -465,15 +504,20 @@ public class StockController implements IController {
         double currentValue = valueDistribution.getOrDefault(tickerSymbol, 0.0);
 
         if (currentValue > intendedValue) {
-          int sellQuantity = (int) ((currentValue - intendedValue) / portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate));
-          IStockInfo sellingStock = new StockInfo("", tickerSymbol, rebalanceDate.toString(), sellQuantity);
+          int sellQuantity = (int) ((currentValue - intendedValue) /
+                  portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate));
+          IStockInfo sellingStock = new StockInfo("", tickerSymbol,
+                  rebalanceDate.toString(), sellQuantity);
           portfolio.sellStock(sellingStock.getTickerSymbol(), rebalanceDate, sellQuantity);
-          System.out.println("Sold " + sellQuantity + " shares of " + tickerSymbol + " to rebalance the portfolio.");
+          System.out.println("Sold " + sellQuantity + " shares of " +
+                  tickerSymbol + " to rebalance the portfolio.");
         } else if (currentValue < intendedValue) {
           double stockPrice = portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate);
           int buyQuantity = (int) ((intendedValue - currentValue) / stockPrice);
-          portfolio.addStock(new StockInfo("", tickerSymbol, rebalanceDate.toString(), buyQuantity));
-          System.out.println("Bought " + buyQuantity + " shares of " + tickerSymbol + " to rebalance the portfolio.");
+          portfolio.addStock(new StockInfo("", tickerSymbol,
+                  rebalanceDate.toString(), buyQuantity));
+          System.out.println("Bought " + buyQuantity + " shares of "
+                  + tickerSymbol + " to rebalance the portfolio.");
         }
       }
 

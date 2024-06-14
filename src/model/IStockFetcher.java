@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * An interface which represents a stock fetcher. Has methods which can
+ * fetch closing prices and the price of individual stocks.
+ */
 public interface IStockFetcher {
 
   /**
@@ -16,7 +20,8 @@ public interface IStockFetcher {
    * @throws IOException if an I/O error occurs when fetching data from the Alpha Vantage API.
    */
   // new interface
-  List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException;
+  List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate,
+                                  LocalDate endDate) throws IOException;
 
   /**
    * Fetches the stock price for a given stock symbol on a specific date.

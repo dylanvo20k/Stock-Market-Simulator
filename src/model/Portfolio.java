@@ -1,9 +1,17 @@
 package model;
 
-import java.io.*;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -11,7 +19,7 @@ import java.util.stream.Collectors;
  * and analyze the portfolio, including adding and selling stocks, calculating portfolio value,
  * retrieving composition, saving to and loading from files, and generating a performance chart.
  */
-public class Portfolio implements  IPortfolio {
+public class Portfolio implements IPortfolio {
   private String clientName;
   private List<IStockInfo> stockList;
 
@@ -41,7 +49,8 @@ public class Portfolio implements  IPortfolio {
   @Override
   public void sellStock(String tickerSymbol, LocalDate date, int quantity) {
     List<IStockInfo> stocksToSell = stockList.stream()
-            .filter(stock -> stock.getTickerSymbol().equals(tickerSymbol) && !stock.getStockDate().isAfter(date))
+            .filter(stock -> stock.getTickerSymbol().equals(tickerSymbol)
+                    && !stock.getStockDate().isAfter(date))
             .collect(Collectors.toList());
 
     int remainingQuantity = quantity;
@@ -93,13 +102,19 @@ public class Portfolio implements  IPortfolio {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
       writer.write("clientName:" + clientName + "\n");
       for (IStockInfo stock : stockList) {
-        writer.write(stock.getTickerSymbol() + "," + stock.getCompanyName() + "," + stock.getStockDate() + "," + stock.getQuantity() + "\n");
+        writer.write(stock.getTickerSymbol() + "," + stock.getCompanyName()
+                + "," + stock.getStockDate() + "," + stock.getQuantity() + "\n");
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+  /**
+   * Loads a portfolio from a saved file.
+   * @param fileName the name of the saved file.
+   * @return a Portfolio.
+   */
   public static Portfolio loadFromFile(String fileName) {
     try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
       String clientName = reader.readLine().split(":")[1];
@@ -120,7 +135,8 @@ public class Portfolio implements  IPortfolio {
 
   @Override
   public void generatePerformanceChart(LocalDate startDate, LocalDate endDate, IModel model) {
-    System.out.println("Performance of portfolio " + clientName + " from " + startDate + " to " + endDate);
+    System.out.println("Performance of portfolio " + clientName
+            + " from " + startDate + " to " + endDate);
 
     Map<LocalDate, Double> monthlyValues = new HashMap<>();
 

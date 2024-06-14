@@ -1,6 +1,5 @@
 import controller.StockController;
-import model.PortfolioManager;
-import view.ViewStocks;
+
 
 /**
  * This class serves as the entry point for the stock portfolio application program.

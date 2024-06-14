@@ -13,7 +13,8 @@ import java.util.List;
 public interface IModel {
 
   /**
-   * Calculates the moving day average for a specified stock over a given number of days ending at the provided date.
+   * Calculates the moving day average for a specified stock over
+   * a given number of days ending at the provided date.
    *
    * @param tickerSymbol the ticker symbol of the stock.
    * @param days the number of days over which to calculate the moving average.
@@ -31,7 +32,8 @@ public interface IModel {
    * @param endDate the end date for the crossover detection period.
    * @return a list of dates where crossovers were detected.
    */
-  List<LocalDate> detectCrossovers(String tickerSymbol, int days, LocalDate startDate, LocalDate endDate);
+  List<LocalDate> detectCrossovers(String tickerSymbol, int days,
+                                   LocalDate startDate, LocalDate endDate);
 
   /**
    * Calculates the gain or loss for a specified stock over the given date range.
@@ -61,5 +63,6 @@ public interface IModel {
    * @return a list of closing prices.
    * @throws IOException if an I/O error occurs.
    */
-  List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) throws IOException;
+  List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate,
+                                  LocalDate endDate) throws IOException;
 }

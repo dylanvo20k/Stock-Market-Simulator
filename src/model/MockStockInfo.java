@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+
 /**
  * This class is used to represent a mock implementation of stock information used for testing
  * purposes.
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 public class MockStockInfo extends StockInfo {
 
   private double mockPrice;
+
   /**
    * Constructs a MockStockInfo object with specified parameters.
    * @param companyName  the name of the company
@@ -16,7 +18,8 @@ public class MockStockInfo extends StockInfo {
    * @param quantity  the quantity of the stock
    * @param mockPrice  the mock price of the stock
    */
-  public MockStockInfo(String companyName, String tickerSymbol, String stockDate, int quantity, double mockPrice) {
+  public MockStockInfo(String companyName, String tickerSymbol,
+                       String stockDate, int quantity, double mockPrice) {
     super(companyName, tickerSymbol, stockDate, quantity);
     this.mockPrice = mockPrice;
   }

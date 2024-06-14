@@ -47,7 +47,8 @@ public class MockModel implements IModel {
   }
 
   @Override
-  public List<LocalDate> detectCrossovers(String tickerSymbol, int days, LocalDate startDate, LocalDate endDate) {
+  public List<LocalDate> detectCrossovers(String tickerSymbol, int days,
+                                          LocalDate startDate, LocalDate endDate) {
     return null;
   }
 
@@ -57,7 +58,8 @@ public class MockModel implements IModel {
   }
 
   @Override
-  public List<Double> fetchClosingPrices(String tickerSymbol, LocalDate startDate, LocalDate endDate) {
+  public List<Double> fetchClosingPrices(String tickerSymbol,
+                                         LocalDate startDate, LocalDate endDate) {
     return null;
   }
 }
