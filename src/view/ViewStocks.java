@@ -11,6 +11,7 @@ import model.StockInfo;
  */
 public class ViewStocks implements IView {
   private Scanner scanner;
+
   /**
    * Constructs a ViewStocks object initializing the scanner to read user input from the console.
    */
@@ -43,11 +44,15 @@ public class ViewStocks implements IView {
 
   @Override
   public void displayPortfolioValue(Portfolio portfolio, String date, double value) {
-    System.out.println("The value of portfolio " + portfolio.getClientName() + " on " + date + " is $" + value);
+    System.out.println("The value of portfolio "
+            + portfolio.getClientName() + " on " + date + " is $" + value);
   }
 
   @Override
   public void displayStockInfo(StockInfo stock, String startDate, String endDate) {
-    System.out.println("Stock information for " + stock.getTickerSymbol() + " (" + stock.getCompanyName() + ") from " + startDate + " to " + endDate);
+    System.out.println("Stock information for "
+            + stock.getTickerSymbol() + " ("
+            + stock.getCompanyName() + ") from "
+            + startDate + " to " + endDate);
   }
 }

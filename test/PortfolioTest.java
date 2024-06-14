@@ -137,15 +137,7 @@ public class PortfolioTest {
 
     portfolio.generatePerformanceChart(startDate, endDate, model);
 
-    String expectedOutput = "Performance of portfolio John Doe from 2023-06-01 to 2023-12-31\n"
-            + "Jun 2023: \n"
-            + "Jul 2023: \n"
-            + "Aug 2023: \n"
-            + "Sep 2023: \n"
-            + "Oct 2023: \n"
-            + "Nov 2023: \n"
-            + "Dec 2023: \n"
-            + "\nScale: * = 0.00\n";
+    String expectedOutput = "Performance of portfolio John Doe from 2023-06-01 to 2023-12-31\n" + "Jun 2023: \n" + "Jul 2023: \n" + "Aug 2023: \n" + "Sep 2023: \n" + "Oct 2023: \n" + "Nov 2023: \n" + "Dec 2023: \n" + "\nScale: * = 0.00\n";
 
     assertEquals(expectedOutput, outContent.toString());
     System.setOut(System.out);
@@ -157,11 +149,7 @@ public class PortfolioTest {
     LocalDate date = LocalDate.of(2023, 6, 1);
 
     // expected results based on the mock model prices
-    Map<String, Double> expectedDistribution = portfolio.getComposition(date).entrySet().stream()
-            .collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
-            ));
+    Map<String, Double> expectedDistribution = portfolio.getComposition(date).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()));
 
     Map<String, Double> actualDistribution = portfolio.getValueDistribution(date, model);
 

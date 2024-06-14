@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * The StockInfo class implements the IStockInfo interface to represent information about a
  * specific stock, including its company name, ticker symbol, stock date, quantity, and methods
@@ -21,6 +22,7 @@ public class StockInfo implements IStockInfo {
   private int quantity;
   private static final String API_KEY = "MYWEKXDOJ1DOGTIH"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
+
   /**
    * Constructs a StockInfo object with the provided company name, ticker symbol, stock date, and
    * quantity.
@@ -96,7 +98,8 @@ public class StockInfo implements IStockInfo {
       if (values.length < 5 || values[0].equals("timestamp")) {
         continue;
       }
-      LocalDate dataDate = LocalDate.parse(values[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Update date format here
+      LocalDate dataDate = LocalDate.parse(values[0],
+              DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Update date format here
       double closingPrice = Double.parseDouble(values[4]);
       stockPrices.put(dataDate, closingPrice);
     }
@@ -111,7 +114,8 @@ public class StockInfo implements IStockInfo {
   }
 
   private boolean isValidTicker(String tickerSymbol) {
-    return tickerSymbol != null && !tickerSymbol.trim().isEmpty() && tickerSymbol.matches("[A-Z]{4}");
+    return tickerSymbol != null && !tickerSymbol.trim().isEmpty()
+            && tickerSymbol.matches("[A-Z]{4}");
   }
 
   public static String getApiKey() {

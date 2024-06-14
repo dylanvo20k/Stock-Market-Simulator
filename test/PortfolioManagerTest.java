@@ -20,11 +20,11 @@ import static org.junit.Assert.assertThrows;
 public class PortfolioManagerTest {
   private PortfolioManager portfolioManager;
   private PortfolioManager mockPortfolioManager;
-  private IStockFetcher stockFetcher;
+
 
   @Before
   public void setUp() {
-    stockFetcher = new AlphaVantageAPI();
+    IStockFetcher stockFetcher = new AlphaVantageAPI();
     portfolioManager = new PortfolioManager(stockFetcher);
     mockPortfolioManager = new MockPortfolioManager(stockFetcher);
   }
