@@ -5,8 +5,12 @@ import java.time.LocalDate;
 
 import model.StockPrice;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+/**
+ * This test class tests all the scenarios and edge cases for the StockPrice class.
+ * This class tests all the getters for the prices of the stocks and also tests the stock date.
+ */
 public class StockPriceTest {
   private double openingPrice;
   private double closingPrice;
@@ -14,6 +18,7 @@ public class StockPriceTest {
   private double highPrice;
   private LocalDate date;
   private StockPrice stockPrice;
+
   @Before
   public void setUp() {
     openingPrice = 100.0;
@@ -28,18 +33,22 @@ public class StockPriceTest {
   public void testGetOpeningPrice() {
     assertEquals(openingPrice, stockPrice.getOpeningPrice(), 0.01);
   }
+
   @Test
   public void testGetClosingPrice() {
     assertEquals(closingPrice, stockPrice.getClosingPrice(), 0.01);
   }
+
   @Test
   public void testGetLowPrice() {
     assertEquals(lowPrice, stockPrice.getLowPrice(), 0.01);
   }
+
   @Test
   public void testGetHighPrice() {
     assertEquals(highPrice, stockPrice.getHighPrice(), 0.01);
   }
+
   @Test
   public void testGetDate() {
     assertEquals(date, stockPrice.getDate());

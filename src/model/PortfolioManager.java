@@ -4,7 +4,16 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< Updated upstream
 
+=======
+import java.util.Map;
+/**
+ * The PortfolioManager class implements the IModel interface to provide functionality for managing
+ * a portfolio of stocks, including calculating moving day averages, detecting crossovers,
+ * calculating gain or loss, and fetching stock prices using the Alpha Vantage API.
+ */
+>>>>>>> Stashed changes
 public class PortfolioManager implements IModel {
   private final IStockFetcher stockDataFetcher;
 
@@ -63,7 +72,18 @@ public class PortfolioManager implements IModel {
   @Override
   public double fetchStockPrice(String tickerSymbol, LocalDate date) {
     try {
+<<<<<<< Updated upstream
       return stockDataFetcher.fetchStockPrice(tickerSymbol, date);
+=======
+      List<Double> closingPrices = fetchClosingPrices(tickerSymbol, date, date);
+
+      if (closingPrices.isEmpty()) {
+        throw new IllegalArgumentException("No price data found for " + tickerSymbol + " on "
+                + date);
+      }
+
+      return closingPrices.get(0); // Return the first (and only) element
+>>>>>>> Stashed changes
     } catch (IOException e) {
       throw new RuntimeException("Error fetching stock prices: " + e.getMessage());
     }

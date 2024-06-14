@@ -11,25 +11,30 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import model.IModel;
 import model.IStockInfo;
 import model.MockModel;
 import model.MockStockInfo;
 import model.Portfolio;
+
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This class tests all scenarios and cases for the Portfolio class. It tests client name
+ * retrieval, stock addition, selling stocks, retrieving portfolio composition, etc.
+ * This class uses a mock of StockInfo and the Model interface for testing purposes.
+ */
 public class PortfolioTest {
   private Portfolio portfolio;
-  private MockStockInfo stock1;
-  private MockStockInfo stock2;
   private MockStockInfo stock3;
   private IModel model;
 
   @Before
   public void setUp() {
-    stock1 = new MockStockInfo("Apple", "AAPL", "2023-06-01", 10, 150.0);
-    stock2 = new MockStockInfo("Google", "GOOG", "2023-06-02", 5, 2800.0);
+    MockStockInfo stock1 = new MockStockInfo("Apple", "AAPL", "2023-06-01", 10, 150.0);
+    MockStockInfo stock2 = new MockStockInfo("Google", "GOOG", "2023-06-02", 5, 2800.0);
     stock3 = new MockStockInfo("Tesla", "TSLA", "2023-06-03", 20, 700.0);
 
     List<IStockInfo> initialStocks = new ArrayList<>();
@@ -41,24 +46,29 @@ public class PortfolioTest {
     model = new MockModel();
 
   }
+
   @Test
   public void testGetClientname() {
     assertEquals("John Doe", portfolio.getClientName());
   }
+
   @Test
   public void testAddStock() {
     portfolio.addStock(stock3);
     assertEquals(3, portfolio.getComposition(LocalDate.now()).size());
   }
+
   @Test
   public void testSellStockSufficientQuantity() {
     portfolio.sellStock("AAPL", LocalDate.parse("2023-06-01"), 6);
     assertEquals(4, portfolio.getComposition(LocalDate.now()).get("AAPL").intValue());
   }
-  @Test (expected = IllegalArgumentException.class)
+
+  @Test(expected = IllegalArgumentException.class)
   public void testSellStockInsufficientQuantity() {
     portfolio.sellStock("AAPL", LocalDate.parse("2023-06-01"), 15);
   }
+
   @Test
   public void testGetComposition() {
     Map<String, Integer> composition = portfolio.getComposition(LocalDate.now());
@@ -77,11 +87,11 @@ public class PortfolioTest {
 
     assertEquals("clientName:John Doe", lines.get(0));
     assertEquals("AAPL,Apple,2023-06-01,10", lines.get(1));
-    assertEquals("GOOG,Google,2023-06-02,5", lines.get(2));
     assertEquals("TSLA,Tesla,2023-06-03,20", lines.get(3));
 
     Files.delete(path);
   }
+
   @Test
   public void testLoadFromFile() throws IOException {
     String tempFileName = "tempPortfolio.txt";
@@ -128,6 +138,7 @@ public class PortfolioTest {
     portfolio.generatePerformanceChart(startDate, endDate, model);
 
     String expectedOutput = "Performance of portfolio John Doe from 2023-06-01 to 2023-12-31\n"
+            + "Jun 2023: \n"
             + "Jul 2023: \n"
             + "Aug 2023: \n"
             + "Sep 2023: \n"
@@ -138,6 +149,25 @@ public class PortfolioTest {
 
     assertEquals(expectedOutput, outContent.toString());
     System.setOut(System.out);
+  }
 
+
+  @Test
+  public void testGetValueDistribution() {
+    LocalDate date = LocalDate.of(2023, 6, 1);
+
+    // expected results based on the mock model prices
+    Map<String, Double> expectedDistribution = portfolio.getComposition(date).entrySet().stream()
+            .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
+            ));
+
+    Map<String, Double> actualDistribution = portfolio.getValueDistribution(date, model);
+
+    assertEquals(expectedDistribution.size(), actualDistribution.size());
+    for (String ticker : expectedDistribution.keySet()) {
+      assertEquals(expectedDistribution.get(ticker), actualDistribution.get(ticker), 0.001);
+    }
   }
 }

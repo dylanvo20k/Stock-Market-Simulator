@@ -1,12 +1,18 @@
 package controller;
 
 import model.*;
+import view.ViewStocks;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
-
+/**
+ * This class implements the controller logic for managing stock portfolios.
+ * It allows creating portfolios, managing stocks within portfolios, calculating various metrics,
+ * saving and loading portfolios from files, and interaction with the user.
+ */
 public class StockController implements IController {
   private PortfolioManager portfolioManager;
   private List<Portfolio> portfolios;
@@ -16,6 +22,14 @@ public class StockController implements IController {
     stockFetcher = new AlphaVantageAPI();
     portfolioManager = new PortfolioManager(stockFetcher);
     portfolios = new ArrayList<>();
+  }
+
+  public void setModel(PortfolioManager model) {
+    // method used for main method
+  }
+
+  public void setView(ViewStocks view) {
+    // method used for main method
   }
 
   @Override

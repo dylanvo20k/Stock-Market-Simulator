@@ -5,10 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is used as a mock implementation of the IModel interface for testing purposes.
+ * It provides simulated stock price data and stub implementation for stock analysis methods.
+ */
 public class MockModel implements IModel {
 
   private Map<String, Map<LocalDate, Double>> stockPrices;
 
+  /**
+   * Constructs a MockModel instance and initializes it with mock stock price data.
+   */
   public MockModel() {
     stockPrices = new HashMap<>();
 

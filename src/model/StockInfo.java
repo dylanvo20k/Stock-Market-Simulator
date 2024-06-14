@@ -8,7 +8,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * The StockInfo class implements the IStockInfo interface to represent information about a
+ * specific stock, including its company name, ticker symbol, stock date, quantity, and methods
+ * to interact with its data, such as fetching its value on a specific date using the Alpha Vantage
+ * API.
+ */
 public class StockInfo implements IStockInfo {
   private String companyName;
   private String tickerSymbol;
@@ -16,7 +21,16 @@ public class StockInfo implements IStockInfo {
   private int quantity;
   private static final String API_KEY = "MYWEKXDOJ1DOGTIH"; // Replace with your own API key
   private static final String API_URL_TEMPLATE = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&outputsize=full&symbol=%s&apikey=%s&datatype=csv";
-
+  /**
+   * Constructs a StockInfo object with the provided company name, ticker symbol, stock date, and
+   * quantity.
+   *
+   * @param companyName  the name of the company
+   * @param tickerSymbol the ticker symbol of the stock
+   * @param stockDate    the date of the stock
+   * @param quantity     the quantity of the stock
+   * @throws IllegalArgumentException if the ticker symbol is invalid
+   */
   public StockInfo(String companyName, String tickerSymbol, String stockDate, int quantity) {
     if (!isValidTicker(tickerSymbol)) {
       throw new IllegalArgumentException("Invalid ticker symbol: " + tickerSymbol);
@@ -26,32 +40,59 @@ public class StockInfo implements IStockInfo {
     this.stockDate = LocalDate.parse(stockDate);
     this.quantity = quantity;
   }
-
+  /**
+   * Retrieves the company name of a stock.
+   *
+   * @return the company name
+   */
   @Override
   public String getCompanyName() {
     return companyName;
   }
-
+  /**
+   * Retrieves the ticker symbol of a stock.
+   *
+   * @return the ticker symbol
+   */
   @Override
   public String getTickerSymbol() {
     return tickerSymbol;
   }
-
+  /**
+   * Retrieves the stock date associated with a stock.
+   *
+   * @return the stock date
+   */
   @Override
   public LocalDate getStockDate() {
     return stockDate;
   }
-
+  /**
+   * Retrieves the quantity of a stock.
+   *
+   * @return the quantity
+   */
   @Override
   public int getQuantity() {
     return quantity;
   }
-
+  /**
+   * Sets the quantity of a stock.
+   *
+   * @param quantity the new quantity
+   */
   @Override
   public void setQuantity(int quantity) {
     this.quantity = quantity;
   }
-
+  /**
+   * Calculates the value of this stock on a specific date based on its quantity and the closing
+   * price.
+   *
+   * @param date the date for which to calculate the stock value
+   * @return the value fo the stock on a given date
+   * @throws RuntimeException if there is an error fetching stock prices
+   */
   public double getStockValueOnDate(LocalDate date) {
     try {
       double priceOnDate = fetchStockPriceOnDate(date);
