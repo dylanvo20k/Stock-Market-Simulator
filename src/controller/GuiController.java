@@ -1,19 +1,16 @@
 package controller;
 
-import model.IPortfolio;
-import model.IStockInfo;
-import model.Portfolio;
-import model.StockInfo;
-import model.IModel;
-import model.PortfolioManager;
-import model.AlphaVantageAPI;
+import model.*;
 import view.GuiView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +36,7 @@ public class GuiController {
     public void actionPerformed(ActionEvent e) {
       String clientName = JOptionPane.showInputDialog("Enter Client Name:");
       if (clientName != null && !clientName.isEmpty()) {
-        portfolio = new Portfolio(clientName, List.of());
+        portfolio = new Portfolio(clientName, new ArrayList<>());
         view.setResultArea("Portfolio created for client: " + clientName);
       }
     }
@@ -54,13 +51,21 @@ public class GuiController {
         try {
           String symbol = view.getAddStockSymbol();
           int quantity = view.getAddStockQuantity();
-          LocalDate date = LocalDate.parse(view.getAddStockDate());
-          IStockInfo stock = new StockInfo(symbol, symbol, date.toString(), quantity);
+          String date = view.getAddStockDate();
+          LocalDate localDate = parseDate(date);
+
+          System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          double price = model.fetchStockPrice(symbol, localDate);
+          System.out.println("Fetched price for " + symbol + " on " + date + ": " + price);
+          IStockInfo stock = new StockInfo(symbol, symbol, date, quantity);
           portfolio.addStock(stock);
           view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
           view.showActionPanel();
+        } catch (DateTimeParseException ex) {
+          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
+          ex.printStackTrace();
         }
       }
     }
@@ -75,12 +80,18 @@ public class GuiController {
         try {
           String symbol = view.getSellStockSymbol();
           int quantity = view.getSellStockQuantity();
-          LocalDate date = LocalDate.parse(view.getSellStockDate());
-          portfolio.sellStock(symbol, date, quantity);
+          String date = view.getSellStockDate();
+          LocalDate localDate = parseDate(date);
+
+          System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          portfolio.sellStock(symbol, localDate, quantity);
           view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
           view.showActionPanel();
+        } catch (DateTimeParseException ex) {
+          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
+          ex.printStackTrace();
         }
       }
     }
@@ -93,12 +104,18 @@ public class GuiController {
         view.showQueryValuePanel();
       } else {
         try {
-          LocalDate date = LocalDate.parse(view.getQueryValueDate());
-          double value = portfolio.calculatePortfolioValue(date, model);
+          String date = view.getQueryValueDate();
+          LocalDate localDate = parseDate(date);
+
+          System.out.println("Querying portfolio value - Date: " + date);
+          double value = portfolio.calculatePortfolioValue(localDate, model);
           view.setResultArea("Portfolio value on " + date + ": " + value);
           view.showActionPanel();
+        } catch (DateTimeParseException ex) {
+          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
+          ex.printStackTrace();
         }
       }
     }
@@ -111,16 +128,22 @@ public class GuiController {
         view.showQueryCompositionPanel();
       } else {
         try {
-          LocalDate date = LocalDate.parse(view.getQueryCompositionDate());
-          Map<String, Integer> composition = portfolio.getComposition(date);
+          String date = view.getQueryCompositionDate();
+          LocalDate localDate = parseDate(date);
+
+          System.out.println("Querying portfolio composition - Date: " + date);
+          Map<String, Integer> composition = portfolio.getComposition(localDate);
           StringBuilder result = new StringBuilder("Portfolio composition on " + date + ":\n");
           for (Map.Entry<String, Integer> entry : composition.entrySet()) {
             result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
           }
           view.setResultArea(result.toString());
           view.showActionPanel();
+        } catch (DateTimeParseException ex) {
+          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
+          ex.printStackTrace();
         }
       }
     }
@@ -150,5 +173,9 @@ public class GuiController {
         view.setResultArea("Portfolio loaded from: " + file.getAbsolutePath());
       }
     }
+  }
+
+  private LocalDate parseDate(String dateString) throws DateTimeParseException {
+    return LocalDate.parse(dateString);
   }
 }

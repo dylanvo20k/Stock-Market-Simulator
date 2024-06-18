@@ -32,7 +32,7 @@ public class Portfolio implements IPortfolio {
    */
   public Portfolio(String clientName, List<IStockInfo> initialStocks) {
     this.clientName = clientName;
-    this.stockList = initialStocks;
+    this.stockList = new ArrayList<>(initialStocks);
   }
 
   @Override
