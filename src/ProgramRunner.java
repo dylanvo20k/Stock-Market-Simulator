@@ -1,4 +1,8 @@
+import javax.swing.*;
+
+import controller.GuiController;
 import controller.StockController;
+import view.GuiView;
 
 
 /**
@@ -12,6 +16,11 @@ public class ProgramRunner {
    */
   public static void main(String[] args) {
     StockController app = new StockController();
+    SwingUtilities.invokeLater(() -> {
+      GuiView view = new GuiView();
+      new GuiController(view);
+      view.setVisible(true);
+    });
     app.start();
   }
 }

@@ -2,133 +2,238 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import model.IPortfolio;
+public class GuiView extends JFrame {
+  private JPanel mainPanel;
+  private CardLayout cardLayout;
 
-public class GuiView {
-  private JFrame frame;
-  private JPanel panel;
-  private JButton createButton;
-  private JButton buyButton;
-  private JButton sellButton;
-  private JButton queryButton;
-  private JButton saveButton;
-  private JButton loadButton;
-  private JTextField stockNameField;
-  private JTextField sharesField;
-  private JTextField dateField;
-  private JTextField portfolioNameField;
-  private JTextArea outputArea;
-  private IModel model;
+  // Panels for different actions
+  private JPanel actionPanel;
+  private JPanel addStockPanel;
+  private JPanel sellStockPanel;
+  private JPanel queryValuePanel;
+  private JPanel queryCompositionPanel;
 
-  public GuiView(IModel model) {
-    this.model = model;
-    createGUI();
+  // Input fields for add stock
+  private JTextField addStockSymbolField;
+  private JTextField addStockQuantityField;
+  private JTextField addStockDateField;
+
+  // Input fields for sell stock
+  private JTextField sellStockSymbolField;
+  private JTextField sellStockQuantityField;
+  private JTextField sellStockDateField;
+
+  // Input fields for query value
+  private JTextField queryValueDateField;
+
+  // Input fields for query composition
+  private JTextField queryCompositionDateField;
+
+  private JTextArea resultArea;
+  private JButton createPortfolioButton;
+  public JButton addStockButton;
+  public JButton sellStockButton;
+  public JButton queryValueButton;
+  public JButton queryCompositionButton;
+  private JButton savePortfolioButton;
+  private JButton loadPortfolioButton;
+
+  private JButton confirmAddStockButton;
+  private JButton confirmSellStockButton;
+  private JButton confirmQueryValueButton;
+  private JButton confirmQueryCompositionButton;
+
+  public GuiView() {
+    setTitle("Portfolio Management");
+    setSize(600, 400);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
+
+    cardLayout = new CardLayout();
+    mainPanel = new JPanel(cardLayout);
+    add(mainPanel, BorderLayout.CENTER);
+
+    // Action panel with main buttons
+    actionPanel = new JPanel(new GridLayout(7, 2));
+    mainPanel.add(actionPanel, "actionPanel");
+
+    createPortfolioButton = new JButton("Create Portfolio");
+    actionPanel.add(createPortfolioButton);
+    actionPanel.add(new JLabel(""));
+
+    addStockButton = new JButton("Add Stock");
+    actionPanel.add(addStockButton);
+
+    sellStockButton = new JButton("Sell Stock");
+    actionPanel.add(sellStockButton);
+
+    queryValueButton = new JButton("Query Portfolio Value");
+    actionPanel.add(queryValueButton);
+
+    queryCompositionButton = new JButton("Query Portfolio Composition");
+    actionPanel.add(queryCompositionButton);
+
+    savePortfolioButton = new JButton("Save Portfolio");
+    actionPanel.add(savePortfolioButton);
+
+    loadPortfolioButton = new JButton("Load Portfolio");
+    actionPanel.add(loadPortfolioButton);
+
+    resultArea = new JTextArea();
+    add(new JScrollPane(resultArea), BorderLayout.SOUTH);
+
+    // Add stock panel
+    addStockPanel = new JPanel(new GridLayout(5, 2));
+    mainPanel.add(addStockPanel, "addStockPanel");
+
+    addStockPanel.add(new JLabel("Stock Symbol:"));
+    addStockSymbolField = new JTextField();
+    addStockPanel.add(addStockSymbolField);
+
+    addStockPanel.add(new JLabel("Quantity:"));
+    addStockQuantityField = new JTextField();
+    addStockPanel.add(addStockQuantityField);
+
+    addStockPanel.add(new JLabel("Date (YYYY-MM-DD):"));
+    addStockDateField = new JTextField();
+    addStockPanel.add(addStockDateField);
+
+    confirmAddStockButton = new JButton("Add Stock");
+    addStockPanel.add(confirmAddStockButton);
+    addStockPanel.add(new JLabel(""));
+
+    // Sell stock panel
+    sellStockPanel = new JPanel(new GridLayout(5, 2));
+    mainPanel.add(sellStockPanel, "sellStockPanel");
+
+    sellStockPanel.add(new JLabel("Stock Symbol:"));
+    sellStockSymbolField = new JTextField();
+    sellStockPanel.add(sellStockSymbolField);
+
+    sellStockPanel.add(new JLabel("Quantity:"));
+    sellStockQuantityField = new JTextField();
+    sellStockPanel.add(sellStockQuantityField);
+
+    sellStockPanel.add(new JLabel("Date (YYYY-MM-DD):"));
+    sellStockDateField = new JTextField();
+    sellStockPanel.add(sellStockDateField);
+
+    confirmSellStockButton = new JButton("Sell Stock");
+    sellStockPanel.add(confirmSellStockButton);
+    sellStockPanel.add(new JLabel(""));
+
+    // Query value panel
+    queryValuePanel = new JPanel(new GridLayout(3, 2));
+    mainPanel.add(queryValuePanel, "queryValuePanel");
+
+    queryValuePanel.add(new JLabel("Query Date (YYYY-MM-DD):"));
+    queryValueDateField = new JTextField();
+    queryValuePanel.add(queryValueDateField);
+
+    confirmQueryValueButton = new JButton("Query Value");
+    queryValuePanel.add(confirmQueryValueButton);
+    queryValuePanel.add(new JLabel(""));
+
+    // Query composition panel
+    queryCompositionPanel = new JPanel(new GridLayout(3, 2));
+    mainPanel.add(queryCompositionPanel, "queryCompositionPanel");
+
+    queryCompositionPanel.add(new JLabel("Query Date (YYYY-MM-DD):"));
+    queryCompositionDateField = new JTextField();
+    queryCompositionPanel.add(queryCompositionDateField);
+
+    confirmQueryCompositionButton = new JButton("Query Composition");
+    queryCompositionPanel.add(confirmQueryCompositionButton);
+    queryCompositionPanel.add(new JLabel(""));
   }
 
-  private void createGUI() {
-    frame = new JFrame("Portfolio Manager");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(500, 400);
-
-    panel = new JPanel();
-    panel.setLayout(new GridLayout(8, 2));
-
-    createButton = new JButton("Create Portfolio");
-    createButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String portfolioName = portfolioNameField.getText();
-        model.createPortfolio(portfolioName);
-        outputArea.setText("Portfolio created: " + portfolioName);
-      }
-    });
-    panel.add(createButton);
-
-    buyButton = new JButton("Buy Stocks");
-    buyButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String stockName = stockNameField.getText();
-        int shares = Integer.parseInt(sharesField.getText());
-        String date = dateField.getText();
-        model.buyStock(stockName, shares, date);
-        outputArea.setText("Stocks bought: " + stockName + ", " + shares + " shares, on " + date);
-      }
-    });
-    panel.add(buyButton);
-
-    sellButton = new JButton("Sell Stocks");
-    sellButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String stockName = stockNameField.getText();
-        int shares = Integer.parseInt(sharesField.getText());
-        String date = dateField.getText();
-        model.sellStock(stockName, shares, date);
-        outputArea.setText("Stocks sold: " + stockName + ", " + shares + " shares, on " + date);
-      }
-    });
-    panel.add(sellButton);
-
-    queryButton = new JButton("Query Portfolio");
-    queryButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String date = dateField.getText();
-        String portfolioName = portfolioNameField.getText();
-        double value = model.queryPortfolioValue(portfolioName, date);
-        String composition = model.queryPortfolioComposition(portfolioName, date);
-        outputArea.setText("Portfolio value on " + date + ": " + value + "\nPortfolio composition on " + date + ": " + composition);
-      }
-    });
-    panel.add(queryButton);
-
-    saveButton = new JButton("Save Portfolio");
-    saveButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String portfolioName = portfolioNameField.getText();
-        String fileName = JOptionPane.showInputDialog("Enter the file name to save the portfolio:");
-        model.savePortfolio(portfolioName, fileName);
-        outputArea.setText("Portfolio saved: " + portfolioName + ", file name: " + fileName);
-      }
-    });
-    panel.add(saveButton);
-
-    loadButton = new JButton("Load Portfolio");
-    loadButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        String fileName = JOptionPane.showInputDialog("Enter the file name to load the portfolio:");
-        String portfolioName = model.loadPortfolio(fileName);
-        outputArea.setText("Portfolio loaded: " + portfolioName + ", file name: " + fileName);
-      }
-    });
-    panel.add(loadButton);
-
-    stockNameField = new JTextField(10);
-    panel.add(new JLabel("Stock Name:"));
-    panel.add(stockNameField);
-
-    sharesField = new JTextField(10);
-    panel.add(new JLabel("Shares:"));
-    panel.add(sharesField);
-
-    dateField = new JTextField(10);
-    panel.add(new JLabel("Date (YYYY-MM-DD):"));
-    panel.add(dateField);
-
-    portfolioNameField = new JTextField(10);
-    panel.add(new JLabel("Portfolio Name:"));
-    panel.add(portfolioNameField);
-
-    outputArea = new JTextArea(10, 20);
-    outputArea.setEditable(false);
-    JScrollPane scrollPane = new JScrollPane(outputArea);
-    panel.add(scrollPane);
-
-    frame.add(panel);
-    frame.setVisible(true);
+  public void showActionPanel() {
+    cardLayout.show(mainPanel, "actionPanel");
   }
 
-  public void displayOutput(String output) {
-    outputArea.setText(output);
+  public void showAddStockPanel() {
+    cardLayout.show(mainPanel, "addStockPanel");
+  }
+
+  public void showSellStockPanel() {
+    cardLayout.show(mainPanel, "sellStockPanel");
+  }
+
+  public void showQueryValuePanel() {
+    cardLayout.show(mainPanel, "queryValuePanel");
+  }
+
+  public void showQueryCompositionPanel() {
+    cardLayout.show(mainPanel, "queryCompositionPanel");
+  }
+
+  public String getAddStockSymbol() {
+    return addStockSymbolField.getText();
+  }
+
+  public int getAddStockQuantity() {
+    return Integer.parseInt(addStockQuantityField.getText());
+  }
+
+  public String getAddStockDate() {
+    return addStockDateField.getText();
+  }
+
+  public String getSellStockSymbol() {
+    return sellStockSymbolField.getText();
+  }
+
+  public int getSellStockQuantity() {
+    return Integer.parseInt(sellStockQuantityField.getText());
+  }
+
+  public String getSellStockDate() {
+    return sellStockDateField.getText();
+  }
+
+  public String getQueryValueDate() {
+    return queryValueDateField.getText();
+  }
+
+  public String getQueryCompositionDate() {
+    return queryCompositionDateField.getText();
+  }
+
+  public void setResultArea(String text) {
+    resultArea.setText(text);
+  }
+
+  public void addCreatePortfolioListener(ActionListener listener) {
+    createPortfolioButton.addActionListener(listener);
+  }
+
+  public void addAddStockListener(ActionListener listener) {
+    addStockButton.addActionListener(listener);
+    confirmAddStockButton.addActionListener(listener);
+  }
+
+  public void addSellStockListener(ActionListener listener) {
+    sellStockButton.addActionListener(listener);
+    confirmSellStockButton.addActionListener(listener);
+  }
+
+  public void addQueryValueListener(ActionListener listener) {
+    queryValueButton.addActionListener(listener);
+    confirmQueryValueButton.addActionListener(listener);
+  }
+
+  public void addQueryCompositionListener(ActionListener listener) {
+    queryCompositionButton.addActionListener(listener);
+    confirmQueryCompositionButton.addActionListener(listener);
+  }
+
+  public void addSavePortfolioListener(ActionListener listener) {
+    savePortfolioButton.addActionListener(listener);
+  }
+
+  public void addLoadPortfolioListener(ActionListener listener) {
+    loadPortfolioButton.addActionListener(listener);
   }
 }
