@@ -8,6 +8,7 @@ import model.IStockInfo;
 import model.Portfolio;
 import model.PortfolioManager;
 import model.StockInfo;
+import view.IView;
 import view.ViewStocks;
 
 import java.time.LocalDate;
@@ -22,8 +23,9 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * saving and loading portfolios from files, and interaction with the user.
  */
 public class StockController implements IController {
-  private PortfolioManager portfolioManager;
+  private IModel portfolioManager;
   private List<Portfolio> portfolios;
+  private IView view;
 
   /**
    * Constructs a StockController object, with a brand new portfolioManager, new portfolios,
@@ -33,19 +35,14 @@ public class StockController implements IController {
     IStockFetcher stockFetcher = new AlphaVantageAPI();
     portfolioManager = new PortfolioManager(stockFetcher);
     portfolios = new ArrayList<>();
+    this.view = new ViewStocks();
   }
 
   @Override
   public void start() {
     Scanner scanner = new Scanner(System.in);
     while (true) {
-      System.out.println("Welcome to the Stock Investment App");
-      System.out.println("1. Create Portfolio");
-      System.out.println("2. Manage Portfolio");
-      System.out.println("3. Save Portfolio to File");
-      System.out.println("4. Load Portfolio from File");
-      System.out.println("5. Exit");
-      System.out.print("Enter your choice: ");
+      view.displayMenu();
       int choice = scanner.nextInt();
 
       switch (choice) {
@@ -82,19 +79,7 @@ public class StockController implements IController {
   // new helper method to revamp the display
   private void managePortfolio(Scanner scanner) {
     while (true) {
-      System.out.println("Manage Portfolio:");
-      System.out.println("1. Add Stock to Portfolio");
-      System.out.println("2. Sell Stock from Portfolio");
-      System.out.println("3. Calculate Portfolio Value");
-      System.out.println("4. Get Portfolio Composition");
-      System.out.println("5. Get Portfolio Value Distribution");
-      System.out.println("6. Calculate Moving Day Average");
-      System.out.println("7. Detect Crossovers");
-      System.out.println("8. Calculate Gain or Loss");
-      System.out.println("9. Rebalance Portfolio");
-      System.out.println("10. View portfolio performance chart");
-      System.out.println("11. Back to main menu");
-      System.out.print("Enter your choice: ");
+      view.displayManagePortfolio();
       int choice = scanner.nextInt();
 
       switch (choice) {

@@ -47,4 +47,6 @@ public interface IView {
    * @param endDate   the end date of the date range
    */
   void displayStockInfo(StockInfo stock, String startDate, String endDate);
+
+  void displayManagePortfolio();
 }
