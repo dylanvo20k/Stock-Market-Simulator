@@ -76,30 +76,30 @@ public class PortfolioManagerTest {
   @Test
   public void testCalculateMovingDayAverageWithIOException() {
     LocalDate endDate = LocalDate.of(2023, 6, 1);
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    IOException exception = assertThrows(IOException.class, () -> {
       mockPortfolioManager.calculateMovingDayAverage("AAPL", 5, endDate);
     });
-    assertEquals("Error fetching stock prices: Mock IO Exception", exception.getMessage());
+    assertEquals("Mock IO Exception", exception.getMessage());
   }
 
   @Test
   public void testDetectCrossoversWithIOException() {
     LocalDate startDate = LocalDate.of(2023, 1, 1);
     LocalDate endDate = LocalDate.of(2023, 1, 31);
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    IOException exception = assertThrows(IOException.class, () -> {
       mockPortfolioManager.detectCrossovers("AAPL", 5, startDate, endDate);
     });
-    assertEquals("Error fetching stock prices: Mock IO Exception", exception.getMessage());
+    assertEquals("Mock IO Exception", exception.getMessage());
   }
 
   @Test
   public void testCalculateGainOrLossWithIOException() {
     LocalDate startDate = LocalDate.of(2023, 1, 1);
     LocalDate endDate = LocalDate.of(2023, 6, 1);
-    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+    IOException exception = assertThrows(IOException.class, () -> {
       mockPortfolioManager.calculateGainOrLoss("AAPL", startDate, endDate);
     });
-    assertEquals("Error fetching stock prices: Mock IO Exception", exception.getMessage());
+    assertEquals("Mock IO Exception", exception.getMessage());
   }
 
   @Test

@@ -31,7 +31,7 @@ public class GuiController {
     this.view.addLoadPortfolioListener(new LoadPortfolioListener());
   }
 
-  class CreatePortfolioListener implements ActionListener {
+  public class CreatePortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       String clientName = JOptionPane.showInputDialog("Enter Client Name:");
@@ -51,18 +51,22 @@ public class GuiController {
         try {
           String symbol = view.getAddStockSymbol();
           int quantity = view.getAddStockQuantity();
-          String date = view.getAddStockDate();
-          LocalDate localDate = parseDate(date);
+          int year = Integer.parseInt(view.getAddStockYear());
+          int month = Integer.parseInt(view.getAddStockMonth());
+          int day = Integer.parseInt(view.getAddStockDay());
+          LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
           double price = model.fetchStockPrice(symbol, localDate);
-          System.out.println("Fetched price for " + symbol + " on " + date + ": " + price);
-          IStockInfo stock = new StockInfo(symbol, symbol, date, quantity);
+          System.out.println("Fetched price for " + symbol + " on " + localDate + ": " + price);
+          IStockInfo stock = new StockInfo(symbol, symbol, localDate.toString(), quantity);
           portfolio.addStock(stock);
-          view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
           view.showActionPanel();
+        } catch (NumberFormatException ex) {
+          view.setResultArea("Error: Please enter valid numbers for year, month, and day");
         } catch (DateTimeParseException ex) {
-          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
+          view.setResultArea("Error: Invalid date. Please ensure the date is correct");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
           ex.printStackTrace();
@@ -80,15 +84,19 @@ public class GuiController {
         try {
           String symbol = view.getSellStockSymbol();
           int quantity = view.getSellStockQuantity();
-          String date = view.getSellStockDate();
-          LocalDate localDate = parseDate(date);
+          int year = Integer.parseInt(view.getSellStockYear());
+          int month = Integer.parseInt(view.getSellStockMonth());
+          int day = Integer.parseInt(view.getSellStockDay());
+          LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
           portfolio.sellStock(symbol, localDate, quantity);
-          view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: " + date);
+          view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
           view.showActionPanel();
+        } catch (NumberFormatException ex) {
+          view.setResultArea("Error: Please enter valid numbers for year, month, and day.");
         } catch (DateTimeParseException ex) {
-          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
+          view.setResultArea("Error: Invalid date. Please ensure the date is correct.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
           ex.printStackTrace();
@@ -97,6 +105,7 @@ public class GuiController {
     }
   }
 
+
   class QueryValueListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -104,15 +113,19 @@ public class GuiController {
         view.showQueryValuePanel();
       } else {
         try {
-          String date = view.getQueryValueDate();
-          LocalDate localDate = parseDate(date);
+          int year = Integer.parseInt(view.getQueryValueYear());
+          int month = Integer.parseInt(view.getQueryValueMonth());
+          int day = Integer.parseInt(view.getQueryValueDay());
+          LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Querying portfolio value - Date: " + date);
+          System.out.println("Querying portfolio value - Date: " + localDate);
           double value = portfolio.calculatePortfolioValue(localDate, model);
-          view.setResultArea("Portfolio value on " + date + ": " + value);
+          view.setResultArea("Portfolio value on " + localDate + ": " + value);
           view.showActionPanel();
+        } catch (NumberFormatException ex) {
+          view.setResultArea("Error: Please enter valid numbers for year, month, and day.");
         } catch (DateTimeParseException ex) {
-          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
+          view.setResultArea("Error: Invalid date. Please ensure the date is correct.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
           ex.printStackTrace();
@@ -128,19 +141,23 @@ public class GuiController {
         view.showQueryCompositionPanel();
       } else {
         try {
-          String date = view.getQueryCompositionDate();
-          LocalDate localDate = parseDate(date);
+          int year = Integer.parseInt(view.getQueryCompositionYear());
+          int month = Integer.parseInt(view.getQueryCompositionMonth());
+          int day = Integer.parseInt(view.getQueryCompositionDay());
+          LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Querying portfolio composition - Date: " + date);
+          System.out.println("Querying portfolio composition - Date: " + localDate);
           Map<String, Integer> composition = portfolio.getComposition(localDate);
-          StringBuilder result = new StringBuilder("Portfolio composition on " + date + ":\n");
+          StringBuilder result = new StringBuilder("Portfolio composition on " + localDate + ":\n");
           for (Map.Entry<String, Integer> entry : composition.entrySet()) {
             result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
           }
           view.setResultArea(result.toString());
           view.showActionPanel();
+        } catch (NumberFormatException ex) {
+          view.setResultArea("Error: Please enter valid numbers for year, month, and day.");
         } catch (DateTimeParseException ex) {
-          view.setResultArea("Error: Invalid date format. Please use YYYY-MM-DD.");
+          view.setResultArea("Error: Invalid date. Please ensure the date is correct.");
         } catch (Exception ex) {
           view.setResultArea("Error: " + ex.getMessage());
           ex.printStackTrace();
@@ -175,7 +192,7 @@ public class GuiController {
     }
   }
 
-  private LocalDate parseDate(String dateString) throws DateTimeParseException {
-    return LocalDate.parse(dateString);
+  private LocalDate parseDate(int year, int month, int day) throws DateTimeParseException {
+    return LocalDate.of(year, month, day);
   }
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -138,7 +139,7 @@ public class Portfolio implements IPortfolio {
     System.out.println("Performance of portfolio " + clientName
             + " from " + startDate + " to " + endDate);
 
-    Map<LocalDate, Double> monthlyValues = new HashMap<>();
+    Map<LocalDate, Double> monthlyValues = new TreeMap<>();
 
     LocalDate currentMonth = LocalDate.of(startDate.getYear(), startDate.getMonth(), 1);
 

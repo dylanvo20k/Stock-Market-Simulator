@@ -18,18 +18,31 @@ public class GuiView extends JFrame {
   // Input fields for add stock
   private JTextField addStockSymbolField;
   private JTextField addStockQuantityField;
-  private JTextField addStockDateField;
+  private JTextField addStockYearField;
+  private JTextField addStockMonthField;
+  private JTextField addStockDayField;
+
 
   // Input fields for sell stock
   private JTextField sellStockSymbolField;
   private JTextField sellStockQuantityField;
-  private JTextField sellStockDateField;
+  private JTextField sellStockYearField;
+
+  private JTextField sellStockMonthField;
+
+  private JTextField sellStockDayField;
+
 
   // Input fields for query value
-  private JTextField queryValueDateField;
+  private JTextField queryValueYearField;
+  private JTextField queryValueMonthField;
+  private JTextField queryValueDayField;
 
   // Input fields for query composition
-  private JTextField queryCompositionDateField;
+  private JTextField queryCompositionYearField;
+  private JTextField queryCompositionMonthField;
+  private JTextField queryCompositionDayField;
+
 
   private JTextArea resultArea;
   private JButton createPortfolioButton;
@@ -63,6 +76,7 @@ public class GuiView extends JFrame {
     actionPanel.add(createPortfolioButton);
     actionPanel.add(new JLabel(""));
 
+
     addStockButton = new JButton("Add Stock");
     actionPanel.add(addStockButton);
 
@@ -85,64 +99,98 @@ public class GuiView extends JFrame {
     add(new JScrollPane(resultArea), BorderLayout.SOUTH);
 
     // Add stock panel
-    addStockPanel = new JPanel(new GridLayout(5, 2));
+    addStockPanel = new JPanel(new GridLayout(6, 2));
     mainPanel.add(addStockPanel, "addStockPanel");
 
-    addStockPanel.add(new JLabel("Stock Symbol:"));
+    addStockPanel.add(new JLabel("Enter the ticker symbol:"));
     addStockSymbolField = new JTextField();
     addStockPanel.add(addStockSymbolField);
 
-    addStockPanel.add(new JLabel("Quantity:"));
+    addStockPanel.add(new JLabel("Enter the quantity:"));
     addStockQuantityField = new JTextField();
     addStockPanel.add(addStockQuantityField);
 
-    addStockPanel.add(new JLabel("Date (YYYY-MM-DD):"));
-    addStockDateField = new JTextField();
-    addStockPanel.add(addStockDateField);
+    addStockPanel.add(new JLabel("Enter the year (YYYY):" ));
+    addStockYearField = new JTextField();
+    addStockPanel.add(addStockYearField);
+
+    addStockPanel.add(new JLabel("Enter the month (MM):"));
+    addStockMonthField = new JTextField();
+    addStockPanel.add(addStockMonthField);
+
+    addStockPanel.add(new JLabel("Enter the day (DD):"));
+    addStockDayField = new JTextField();
+    addStockPanel.add(addStockDayField);
 
     confirmAddStockButton = new JButton("Add Stock");
     addStockPanel.add(confirmAddStockButton);
     addStockPanel.add(new JLabel(""));
 
     // Sell stock panel
-    sellStockPanel = new JPanel(new GridLayout(5, 2));
+    sellStockPanel = new JPanel(new GridLayout(6, 2));
     mainPanel.add(sellStockPanel, "sellStockPanel");
 
-    sellStockPanel.add(new JLabel("Stock Symbol:"));
+    sellStockPanel.add(new JLabel("Enter the ticker symbol:"));
     sellStockSymbolField = new JTextField();
     sellStockPanel.add(sellStockSymbolField);
 
-    sellStockPanel.add(new JLabel("Quantity:"));
+    sellStockPanel.add(new JLabel("Enter the quantity:"));
     sellStockQuantityField = new JTextField();
     sellStockPanel.add(sellStockQuantityField);
 
-    sellStockPanel.add(new JLabel("Date (YYYY-MM-DD):"));
-    sellStockDateField = new JTextField();
-    sellStockPanel.add(sellStockDateField);
+    sellStockPanel.add(new JLabel("Enter the year (YYYY):"));
+    sellStockYearField = new JTextField();
+    sellStockPanel.add(sellStockYearField);
+
+    sellStockPanel.add(new JLabel("Enter the month (MM):"));
+    sellStockMonthField = new JTextField();
+    sellStockPanel.add(sellStockMonthField);
+
+    sellStockPanel.add(new JLabel("Enter the day (DD):"));
+    sellStockDayField = new JTextField();
+    sellStockPanel.add(sellStockDayField);
 
     confirmSellStockButton = new JButton("Sell Stock");
     sellStockPanel.add(confirmSellStockButton);
     sellStockPanel.add(new JLabel(""));
 
+
     // Query value panel
-    queryValuePanel = new JPanel(new GridLayout(3, 2));
+    queryValuePanel = new JPanel(new GridLayout(4, 2));
     mainPanel.add(queryValuePanel, "queryValuePanel");
 
-    queryValuePanel.add(new JLabel("Query Date (YYYY-MM-DD):"));
-    queryValueDateField = new JTextField();
-    queryValuePanel.add(queryValueDateField);
+    queryValuePanel.add(new JLabel("Enter the year (YYYY):"));
+    queryValueYearField = new JTextField();
+    queryValuePanel.add(queryValueYearField);
+
+    queryValuePanel.add(new JLabel("Enter the month (MM):"));
+    queryValueMonthField = new JTextField();
+    queryValuePanel.add(queryValueMonthField);
+
+    queryValuePanel.add(new JLabel("Enter the day (DD):"));
+    queryValueDayField = new JTextField();
+    queryValuePanel.add(queryValueDayField);
 
     confirmQueryValueButton = new JButton("Query Value");
     queryValuePanel.add(confirmQueryValueButton);
     queryValuePanel.add(new JLabel(""));
 
+
     // Query composition panel
-    queryCompositionPanel = new JPanel(new GridLayout(3, 2));
+    queryCompositionPanel = new JPanel(new GridLayout(4, 2));
     mainPanel.add(queryCompositionPanel, "queryCompositionPanel");
 
-    queryCompositionPanel.add(new JLabel("Query Date (YYYY-MM-DD):"));
-    queryCompositionDateField = new JTextField();
-    queryCompositionPanel.add(queryCompositionDateField);
+    queryCompositionPanel.add(new JLabel("Enter the year (YYYY):"));
+    queryCompositionYearField = new JTextField();
+    queryCompositionPanel.add(queryCompositionYearField);
+
+    queryCompositionPanel.add(new JLabel("Enter the month (MM):"));
+    queryCompositionMonthField = new JTextField();
+    queryCompositionPanel.add(queryCompositionMonthField);
+
+    queryCompositionPanel.add(new JLabel("Enter the day (DD):"));
+    queryCompositionDayField = new JTextField();
+    queryCompositionPanel.add(queryCompositionDayField);
 
     confirmQueryCompositionButton = new JButton("Query Composition");
     queryCompositionPanel.add(confirmQueryCompositionButton);
@@ -173,13 +221,23 @@ public class GuiView extends JFrame {
     return addStockSymbolField.getText();
   }
 
+
   public int getAddStockQuantity() {
     return Integer.parseInt(addStockQuantityField.getText());
   }
-
-  public String getAddStockDate() {
-    return addStockDateField.getText();
+  public String getAddStockYear() {
+    return addStockYearField.getText();
   }
+
+  public String getAddStockMonth() {
+    return addStockMonthField.getText();
+  }
+
+  public String getAddStockDay() {
+    return addStockDayField.getText();
+  }
+
+
 
   public String getSellStockSymbol() {
     return sellStockSymbolField.getText();
@@ -189,20 +247,47 @@ public class GuiView extends JFrame {
     return Integer.parseInt(sellStockQuantityField.getText());
   }
 
-  public String getSellStockDate() {
-    return sellStockDateField.getText();
+  public String getSellStockYear() {
+    return sellStockYearField.getText();
+  }
+  public String getSellStockMonth() {
+    return sellStockMonthField.getText();
   }
 
-  public String getQueryValueDate() {
-    return queryValueDateField.getText();
+  public String getSellStockDay() {
+    return sellStockDayField.getText();
   }
 
-  public String getQueryCompositionDate() {
-    return queryCompositionDateField.getText();
+  public String getQueryValueYear() {
+    return queryValueYearField.getText();
+  }
+
+  public String getQueryValueMonth() {
+    return queryValueMonthField.getText();
+  }
+
+  public String getQueryValueDay() {
+    return queryValueDayField.getText();
+  }
+
+
+  public String getQueryCompositionYear() {
+    return queryCompositionYearField.getText();
+  }
+
+  public String getQueryCompositionMonth() {
+    return queryCompositionMonthField.getText();
+  }
+
+  public String getQueryCompositionDay() {
+    return queryCompositionDayField.getText();
   }
 
   public void setResultArea(String text) {
     resultArea.setText(text);
+  }
+  public JButton getCreatePortfolioButton() {
+    return createPortfolioButton;
   }
 
   public void addCreatePortfolioListener(ActionListener listener) {
