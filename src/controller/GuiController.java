@@ -62,6 +62,7 @@ public class GuiController {
           IStockInfo stock = new StockInfo(symbol, symbol, localDate.toString(), quantity);
           portfolio.addStock(stock);
           view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          view.clearAddStockFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
           view.setResultArea("Error: Please enter valid numbers for year, month, and day");
@@ -92,6 +93,7 @@ public class GuiController {
           System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
           portfolio.sellStock(symbol, localDate, quantity);
           view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          view.clearSellStockFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
           view.setResultArea("Error: Please enter valid numbers for year, month, and day.");
@@ -121,6 +123,7 @@ public class GuiController {
           System.out.println("Querying portfolio value - Date: " + localDate);
           double value = portfolio.calculatePortfolioValue(localDate, model);
           view.setResultArea("Portfolio value on " + localDate + ": " + value);
+          view.clearQueryValueFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
           view.setResultArea("Error: Please enter valid numbers for year, month, and day.");
@@ -153,6 +156,7 @@ public class GuiController {
             result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
           }
           view.setResultArea(result.toString());
+          view.clearQueryCompositionFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
           view.setResultArea("Error: Please enter valid numbers for year, month, and day.");

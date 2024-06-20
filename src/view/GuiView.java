@@ -321,4 +321,36 @@ public class GuiView extends JFrame {
   public void addLoadPortfolioListener(ActionListener listener) {
     loadPortfolioButton.addActionListener(listener);
   }
+
+  // Method to clear add stock input fields
+  public void clearAddStockFields() {
+    addStockSymbolField.setText("");
+    addStockQuantityField.setText("");
+    addStockYearField.setText("");
+    addStockMonthField.setText("");
+    addStockDayField.setText("");
+  }
+
+  // Method to clear sell stock input fields
+  public void clearSellStockFields() {
+    sellStockSymbolField.setText("");
+    sellStockQuantityField.setText("");
+    sellStockYearField.setText("");
+    sellStockMonthField.setText("");
+    sellStockDayField.setText("");
+  }
+
+  // Add more clear methods for other panels if necessary
+  public void clearQueryValueFields() {
+    queryValueYearField.setText("");
+    queryValueMonthField.setText("");
+    queryValueDayField.setText("");
+  }
+
+  public void clearQueryCompositionFields() {
+    queryCompositionYearField.setText("");
+    queryCompositionMonthField.setText("");
+    queryCompositionDayField.setText("");
+  }
+
 }
