@@ -122,4 +122,13 @@ public class StockInfo implements IStockInfo {
     return API_KEY;
   }
 
+  @Override
+  public boolean isValid() {
+    return companyName != null
+            && !companyName.trim().isEmpty()
+            && tickerSymbol != null
+            && !tickerSymbol.trim().isEmpty()
+            && stockDate != null
+            && quantity > 0;
+  }
 }

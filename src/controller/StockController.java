@@ -3,6 +3,7 @@ package controller;
 
 import model.AlphaVantageAPI;
 import model.IModel;
+import model.IPortfolio;
 import model.IStockFetcher;
 import model.IStockInfo;
 import model.Portfolio;
@@ -24,7 +25,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
  */
 public class StockController implements IController {
   private IModel portfolioManager;
-  private List<Portfolio> portfolios;
+  private List<IPortfolio> portfolios;
   private IView view;
 
   /**
@@ -124,7 +125,7 @@ public class StockController implements IController {
   private void addStockToPortfolio(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -165,7 +166,7 @@ public class StockController implements IController {
   private void sellStockFromPortfolio(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -202,7 +203,7 @@ public class StockController implements IController {
   private void calculatePortfolioValue(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -231,7 +232,7 @@ public class StockController implements IController {
   private void getPortfolioComposition(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -258,7 +259,7 @@ public class StockController implements IController {
   private void getPortfolioValueDistribution(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -286,7 +287,7 @@ public class StockController implements IController {
   private void savePortfolioToFile(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -441,7 +442,7 @@ public class StockController implements IController {
   private void rebalancePortfolio(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;
@@ -468,9 +469,19 @@ public class StockController implements IController {
           break;
         }
         double percentage = scanner.nextDouble();
+        if (percentage < 0 || percentage > 100) {
+          System.out.println("Error: Each weight must be between 0 and 100.");
+          return;
+        }
         targetAllocation.put(ticker, percentage);
       }
 
+      double totalPercentage = targetAllocation.values().stream()
+              .mapToDouble(Double::doubleValue).sum();
+      if (totalPercentage != 100) {
+        System.out.println("Error: Total weights must add up to 100%.");
+        return;
+      }
       Map<String, Integer> composition = portfolio.getComposition(rebalanceDate);
       Map<String, Double> valueDistribution = portfolio
               .getValueDistribution(rebalanceDate, portfolioManager);
@@ -512,8 +523,8 @@ public class StockController implements IController {
     }
   }
 
-  private Portfolio findPortfolioByClientName(String clientName) {
-    for (Portfolio portfolio : portfolios) {
+  private IPortfolio findPortfolioByClientName(String clientName) {
+    for (IPortfolio portfolio : portfolios) {
       if (portfolio.getClientName().equals(clientName)) {
         return portfolio;
       }
@@ -524,7 +535,7 @@ public class StockController implements IController {
   private void viewPortfolioPerformanceChart(Scanner scanner) {
     System.out.print("Enter client name: ");
     String clientName = scanner.next();
-    Portfolio portfolio = findPortfolioByClientName(clientName);
+    IPortfolio portfolio = findPortfolioByClientName(clientName);
     if (portfolio == null) {
       System.out.println("Portfolio not found!");
       return;

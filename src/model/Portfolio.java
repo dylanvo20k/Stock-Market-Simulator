@@ -43,7 +43,11 @@ public class Portfolio implements IPortfolio {
 
   @Override
   public void addStock(IStockInfo stock) {
-    stockList.add(stock);
+    if (stock.isValid()) {
+      stockList.add(stock);
+    } else {
+      throw new IllegalArgumentException("Invalid stock information.");
+    }
   }
 
 
@@ -74,6 +78,9 @@ public class Portfolio implements IPortfolio {
 
   @Override
   public Map<String, Integer> getComposition(LocalDate date) {
+    if (date == null) {
+      throw new IllegalArgumentException("Date cannot be null.");
+    }
     return stockList.stream()
             .filter(stock -> !stock.getStockDate().isAfter(date))
             .collect(Collectors.groupingBy(
@@ -176,6 +183,7 @@ public class Portfolio implements IPortfolio {
   @Override
   public List<IStockInfo> getStockList() {
     return new ArrayList<>(stockList);
-
   }
+
+
 }
