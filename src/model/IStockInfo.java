@@ -45,4 +45,6 @@ public interface IStockInfo {
    * @param quantity the new quantity to set.
    */
   void setQuantity(int quantity);
+
+  boolean isValid();
 }
