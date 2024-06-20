@@ -31,7 +31,7 @@ public class StockController implements IController {
    * Constructs a StockController object, with a brand new portfolioManager, new portfolios,
    * and sets up the API.
    */
-  public StockController() {
+  public StockController(IView view) {
     IStockFetcher stockFetcher = new AlphaVantageAPI();
     portfolioManager = new PortfolioManager(stockFetcher);
     portfolios = new ArrayList<>();
