@@ -25,8 +25,8 @@ public class ProgramRunner {
     } else {
       // Invalid command-line arguments
       System.out.println("Invalid command-line arguments. Usage:");
-      System.out.println("To run in text mode: java -jar Program.jar -text");
-      System.out.println("To run in GUI mode: java -jar Program.jar");
+      System.out.println("To run in text mode: java -jar assignment-4-OOD.jar -text");
+      System.out.println("To run in GUI mode: java -jar assignment-4-OOD.jar");
     }
   }
 
@@ -34,13 +34,12 @@ public class ProgramRunner {
    * Method to launch the text-based interface.
    */
   private static void launchTextMode() {
-    // Example test run using MockViewStocks
-    String mockInput = "1\n2\n3\n"; // Example input for testing
-    MockViewStocks mockView = new MockViewStocks(mockInput);
-    StockController mockApp = new StockController(mockView);
-    mockApp.start();
-    System.out.println(mockView.getOutput());
+    ViewStocks view = new ViewStocks();
+    StockController textApp = new StockController(view);
+    textApp.start();
+    System.exit(0);
   }
+
 
   /**
    * Method to launch the GUI interface.
@@ -52,9 +51,5 @@ public class ProgramRunner {
       new GuiController(guiView);
       guiView.setVisible(true);
     });
-
-    // Run the console application with the original view
-    StockController consoleApp = new StockController(new ViewStocks());
-    consoleApp.start();
   }
 }
