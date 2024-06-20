@@ -35,7 +35,7 @@ public class ProgramRunner {
    */
   private static void launchTextMode() {
     ViewStocks view = new ViewStocks();
-    StockController textApp = new StockController(view);
+    StockController textApp = new StockController(view);  
     textApp.start();
     System.exit(0);
   }
