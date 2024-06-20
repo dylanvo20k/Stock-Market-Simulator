@@ -66,7 +66,7 @@ public class GuiController {
    * quantity, and purchase date. Validates the input and adds the stock to the portfolio.
    * Updates the view with the result.
    */
-  class AddStockListener implements ActionListener {
+  public class AddStockListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == view.addStockButton) {
@@ -107,7 +107,7 @@ public class GuiController {
    * quantity, and sale date. Validates the input and removes the stock from the portfolio.
    * Updates the view with the result.
    */
-  class SellStockListener implements ActionListener {
+  public class SellStockListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == view.sellStockButton) {
@@ -145,7 +145,7 @@ public class GuiController {
    * enter the date for which the portfolio value is to be calculated. Validates the input,
    * calculates the portfolio value, and updates the view with the result.
    */
-  class QueryValueListener implements ActionListener {
+  public class QueryValueListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == view.queryValueButton) {
@@ -179,7 +179,7 @@ public class GuiController {
    * to enter the date for which the portfolio composition is to be retrieved. Validates the input,
    * retrieves the portfolio composition, and updates the view with the result.
    */
-  class QueryCompositionListener implements ActionListener {
+  public class QueryCompositionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == view.queryCompositionButton) {
@@ -217,7 +217,7 @@ public class GuiController {
    * Listener for saving the portfolio to a file. Prompts the user to choose a file location
    * and saves the portfolio to the selected file.
    */
-  class SavePortfolioListener implements ActionListener {
+  public class SavePortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       JFileChooser fileChooser = new JFileChooser();
@@ -234,7 +234,7 @@ public class GuiController {
    * Listener for loading the portfolio from a file. Prompts the user to choose a file location
    * and loads the portfolio to the text-based interface or GUI.
    */
-  class LoadPortfolioListener implements ActionListener {
+  public class LoadPortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
       JFileChooser fileChooser = new JFileChooser();

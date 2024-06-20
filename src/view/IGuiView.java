@@ -3,8 +3,9 @@ package view;
 import java.awt.event.ActionListener;
 
 /**
- * This interface defines the contract for the graphical user interface of the portfolio management application.
- * It includes methods for displaying different panels, retrieving user input, and setting result text.
+ * This interface defines the contract for the graphical user interface of the portfolio
+ * management application. It includes methods for displaying different panels, retrieving user
+ * input, and setting result text.
  */
 public interface IGuiView {
   /**

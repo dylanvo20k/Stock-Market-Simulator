@@ -16,7 +16,6 @@ public class ProgramRunner {
    */
   public static void main(String[] args) {
     if (args.length == 0) {
-      // No command line arguments provided, launch GUI by default
       launchGuiMode();
     } else if (args.length == 1 && args[0].equals("-text")) {
       // Launch text-based interface
@@ -44,7 +43,6 @@ public class ProgramRunner {
    * Method to launch the GUI interface.
    */
   private static void launchGuiMode() {
-    // Run the Swing GUI
     SwingUtilities.invokeLater(() -> {
       GuiView guiView = new GuiView();
       new GuiController(guiView);

@@ -11,5 +11,3 @@
 6. Next, in our Portfolio class, we added a check for our addStock method. The check was added to verify that stocks entered by a user were valid before they were added to the Portfolio. Similar to #5, we did this in order to prevent users from inputting invalid stocks. 
 
 7. Lastly, in our Portfolio class, we added a check for our getComposition method. The check was added to verify that a date entered by a user was valid before the the composition of our portfolio was retrieved. We did this in order to prevent users from inputting invalid dates when trying to retrieve the composition of their portfolio. 
-
-8. 
