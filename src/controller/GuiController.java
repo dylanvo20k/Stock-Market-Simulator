@@ -49,11 +49,11 @@ public class GuiController {
         view.showAddStockPanel();
       } else {
         try {
-          String symbol = view.getAddStockSymbol();
+          String symbol = view.getAddStockSymbol().trim();
           int quantity = view.getAddStockQuantity();
-          int year = Integer.parseInt(view.getAddStockYear());
-          int month = Integer.parseInt(view.getAddStockMonth());
-          int day = Integer.parseInt(view.getAddStockDay());
+          int year = Integer.parseInt(view.getAddStockYear().trim());
+          int month = Integer.parseInt(view.getAddStockMonth().trim());
+          int day = Integer.parseInt(view.getAddStockDay().trim());
           LocalDate localDate = LocalDate.of(year, month, day);
 
           System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
@@ -83,11 +83,11 @@ public class GuiController {
         view.showSellStockPanel();
       } else {
         try {
-          String symbol = view.getSellStockSymbol();
+          String symbol = view.getSellStockSymbol().trim();
           int quantity = view.getSellStockQuantity();
-          int year = Integer.parseInt(view.getSellStockYear());
-          int month = Integer.parseInt(view.getSellStockMonth());
-          int day = Integer.parseInt(view.getSellStockDay());
+          int year = Integer.parseInt(view.getSellStockYear().trim());
+          int month = Integer.parseInt(view.getSellStockMonth().trim());
+          int day = Integer.parseInt(view.getSellStockDay().trim());
           LocalDate localDate = LocalDate.of(year, month, day);
 
           System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
@@ -115,9 +115,9 @@ public class GuiController {
         view.showQueryValuePanel();
       } else {
         try {
-          int year = Integer.parseInt(view.getQueryValueYear());
-          int month = Integer.parseInt(view.getQueryValueMonth());
-          int day = Integer.parseInt(view.getQueryValueDay());
+          int year = Integer.parseInt(view.getQueryValueYear().trim());
+          int month = Integer.parseInt(view.getQueryValueMonth().trim());
+          int day = Integer.parseInt(view.getQueryValueDay().trim());
           LocalDate localDate = LocalDate.of(year, month, day);
 
           System.out.println("Querying portfolio value - Date: " + localDate);
@@ -144,9 +144,9 @@ public class GuiController {
         view.showQueryCompositionPanel();
       } else {
         try {
-          int year = Integer.parseInt(view.getQueryCompositionYear());
-          int month = Integer.parseInt(view.getQueryCompositionMonth());
-          int day = Integer.parseInt(view.getQueryCompositionDay());
+          int year = Integer.parseInt(view.getQueryCompositionYear().trim());
+          int month = Integer.parseInt(view.getQueryCompositionMonth().trim());
+          int day = Integer.parseInt(view.getQueryCompositionDay().trim());
           LocalDate localDate = LocalDate.of(year, month, day);
 
           System.out.println("Querying portfolio composition - Date: " + localDate);
