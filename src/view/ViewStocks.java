@@ -46,6 +46,7 @@ public class ViewStocks implements IView {
     System.out.println("11. Back to main menu");
     System.out.print("Enter your choice: ");
   }
+
   @Override
   public void displayMessage(String message) {
     System.out.println(message);

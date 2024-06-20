@@ -1,19 +1,28 @@
 package view;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+
+import java.awt.CardLayout;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+
+/**
+ * This class represents the graphical user interface for our portfolio management application. It
+ * provides a main menu window with different panels of functionalities for user actions like
+ * creating a portfolio, buying/selling stocks, querying portfolio value, querying portfolio
+ * composition, and saving/loading portfolio files.
+ */
 public class GuiView extends JFrame {
   private JPanel mainPanel;
   private CardLayout cardLayout;
-
-  // Panels for different actions
-  private JPanel actionPanel;
-  private JPanel addStockPanel;
-  private JPanel sellStockPanel;
-  private JPanel queryValuePanel;
-  private JPanel queryCompositionPanel;
 
   // Input fields for add stock
   private JTextField addStockSymbolField;
@@ -58,6 +67,10 @@ public class GuiView extends JFrame {
   private JButton confirmQueryValueButton;
   private JButton confirmQueryCompositionButton;
 
+  /**
+   * Constructs a GuiView object and initializes the main frame with all its components for the GUI
+   * view.
+   */
   public GuiView() {
     setTitle("Portfolio Management");
     setSize(600, 400);
@@ -69,7 +82,8 @@ public class GuiView extends JFrame {
     add(mainPanel, BorderLayout.CENTER);
 
     // Action panel with main buttons
-    actionPanel = new JPanel(new GridLayout(7, 2));
+    // Panels for different actions
+    JPanel actionPanel = new JPanel(new GridLayout(7, 2));
     mainPanel.add(actionPanel, "actionPanel");
 
     createPortfolioButton = new JButton("Create Portfolio");
@@ -99,7 +113,7 @@ public class GuiView extends JFrame {
     add(new JScrollPane(resultArea), BorderLayout.SOUTH);
 
     // Add stock panel
-    addStockPanel = new JPanel(new GridLayout(6, 2));
+    JPanel addStockPanel = new JPanel(new GridLayout(6, 2));
     mainPanel.add(addStockPanel, "addStockPanel");
 
     addStockPanel.add(new JLabel("Enter the ticker symbol:"));
@@ -110,7 +124,7 @@ public class GuiView extends JFrame {
     addStockQuantityField = new JTextField();
     addStockPanel.add(addStockQuantityField);
 
-    addStockPanel.add(new JLabel("Enter the year (YYYY):" ));
+    addStockPanel.add(new JLabel("Enter the year (YYYY):"));
     addStockYearField = new JTextField();
     addStockPanel.add(addStockYearField);
 
@@ -127,7 +141,7 @@ public class GuiView extends JFrame {
     addStockPanel.add(new JLabel(""));
 
     // Sell stock panel
-    sellStockPanel = new JPanel(new GridLayout(6, 2));
+    JPanel sellStockPanel = new JPanel(new GridLayout(6, 2));
     mainPanel.add(sellStockPanel, "sellStockPanel");
 
     sellStockPanel.add(new JLabel("Enter the ticker symbol:"));
@@ -156,7 +170,7 @@ public class GuiView extends JFrame {
 
 
     // Query value panel
-    queryValuePanel = new JPanel(new GridLayout(4, 2));
+    JPanel queryValuePanel = new JPanel(new GridLayout(4, 2));
     mainPanel.add(queryValuePanel, "queryValuePanel");
 
     queryValuePanel.add(new JLabel("Enter the year (YYYY):"));
@@ -177,7 +191,7 @@ public class GuiView extends JFrame {
 
 
     // Query composition panel
-    queryCompositionPanel = new JPanel(new GridLayout(4, 2));
+    JPanel queryCompositionPanel = new JPanel(new GridLayout(4, 2));
     mainPanel.add(queryCompositionPanel, "queryCompositionPanel");
 
     queryCompositionPanel.add(new JLabel("Enter the year (YYYY):"));
@@ -197,132 +211,271 @@ public class GuiView extends JFrame {
     queryCompositionPanel.add(new JLabel(""));
   }
 
+  /**
+   * Shows the action panel in the GUI using CardLayout.
+   * This panel contains main buttons for various actions.
+   */
   public void showActionPanel() {
     cardLayout.show(mainPanel, "actionPanel");
   }
 
+  /**
+   * Shows the add stock panel in the GUI using CardLayout.
+   * This panel allows users to input details for adding a stock.
+   */
   public void showAddStockPanel() {
     cardLayout.show(mainPanel, "addStockPanel");
   }
 
+  /**
+   * Shows the sell stock panel in the GUI using CardLayout.
+   * This panel allows users to input details for selling a stock.
+   */
   public void showSellStockPanel() {
     cardLayout.show(mainPanel, "sellStockPanel");
   }
 
+  /**
+   * Shows the query value panel in the GUI using CardLayout.
+   * This panel allows users to input a date to query the portfolio value.
+   */
   public void showQueryValuePanel() {
     cardLayout.show(mainPanel, "queryValuePanel");
   }
 
+  /**
+   * Shows the query composition panel in the GUI using CardLayout.
+   * This panel allows users to input a date to query the portfolio composition.
+   */
   public void showQueryCompositionPanel() {
     cardLayout.show(mainPanel, "queryCompositionPanel");
   }
 
+  /**
+   * Retrieves the text entered in the add stock symbol field.
+   *
+   * @return The text entered in the add stock symbol field.
+   */
   public String getAddStockSymbol() {
     return addStockSymbolField.getText();
   }
 
-
+  /**
+   * Retrieves the integer value entered in the add stock quantity field.
+   *
+   * @return The integer value entered in the add stock quantity field.
+   * @throws NumberFormatException if the text in the field is not a valid integer.
+   */
   public int getAddStockQuantity() {
     return Integer.parseInt(addStockQuantityField.getText());
   }
+
+  /**
+   * Retrieves the text entered in the add stock year field.
+   *
+   * @return The text entered in the add stock year field.
+   */
   public String getAddStockYear() {
     return addStockYearField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the add stock month field.
+   *
+   * @return The text entered in the add stock month field.
+   */
   public String getAddStockMonth() {
     return addStockMonthField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the add stock day field.
+   *
+   * @return The text entered in the add stock day field.
+   */
   public String getAddStockDay() {
     return addStockDayField.getText();
   }
 
-
-
+  /**
+   * Retrieves the text entered in the sell stock symbol field.
+   *
+   * @return The text entered in the sell stock symbol field.
+   */
   public String getSellStockSymbol() {
     return sellStockSymbolField.getText();
   }
 
+  /**
+   * Retrieves the integer value entered in the sell stock quantity field.
+   *
+   * @return The integer value entered in the sell stock quantity field.
+   * @throws NumberFormatException if the text in the field is not a valid integer.
+   */
   public int getSellStockQuantity() {
     return Integer.parseInt(sellStockQuantityField.getText());
   }
 
+  /**
+   * Retrieves the text entered in the sell stock year field.
+   *
+   * @return The text entered in the sell stock year field.
+   */
   public String getSellStockYear() {
     return sellStockYearField.getText();
   }
+
+  /**
+   * Retrieves the text entered in the sell stock month field.
+   *
+   * @return The text entered in the sell stock month field.
+   */
   public String getSellStockMonth() {
     return sellStockMonthField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the sell stock day field.
+   *
+   * @return The text entered in the sell stock day field.
+   */
   public String getSellStockDay() {
     return sellStockDayField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the query value year field.
+   *
+   * @return The text entered in the query value year field.
+   */
   public String getQueryValueYear() {
     return queryValueYearField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the query value month field.
+   *
+   * @return The text entered in the query value month field.
+   */
   public String getQueryValueMonth() {
     return queryValueMonthField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the query value day field.
+   *
+   * @return The text entered in the query value day field.
+   */
   public String getQueryValueDay() {
     return queryValueDayField.getText();
   }
 
-
+  /**
+   * Retrieves the text entered in the query composition year field.
+   *
+   * @return The text entered in the query composition year field.
+   */
   public String getQueryCompositionYear() {
     return queryCompositionYearField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the query composition month field.
+   *
+   * @return The text entered in the query composition month field.
+   */
   public String getQueryCompositionMonth() {
     return queryCompositionMonthField.getText();
   }
 
+  /**
+   * Retrieves the text entered in the query composition day field.
+   *
+   * @return The text entered in the query composition day field.
+   */
   public String getQueryCompositionDay() {
     return queryCompositionDayField.getText();
   }
 
+  /**
+   * Sets the text to be displayed in the result area.
+   *
+   * @param text The text to be displayed.
+   */
   public void setResultArea(String text) {
     resultArea.setText(text);
   }
-  public JButton getCreatePortfolioButton() {
-    return createPortfolioButton;
-  }
 
+  /**
+   * Adds an ActionListener to the create portfolio button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addCreatePortfolioListener(ActionListener listener) {
     createPortfolioButton.addActionListener(listener);
   }
 
+  /**
+   * Adds ActionListeners to the add stock button and confirm add stock button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addAddStockListener(ActionListener listener) {
     addStockButton.addActionListener(listener);
     confirmAddStockButton.addActionListener(listener);
   }
 
+  /**
+   * Adds ActionListeners to the sell stock button and confirm sell stock button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addSellStockListener(ActionListener listener) {
     sellStockButton.addActionListener(listener);
     confirmSellStockButton.addActionListener(listener);
   }
 
+  /**
+   * Adds ActionListeners to the query value button and confirm query value button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addQueryValueListener(ActionListener listener) {
     queryValueButton.addActionListener(listener);
     confirmQueryValueButton.addActionListener(listener);
   }
 
+  /**
+   * Adds ActionListeners to the query composition button and confirm query composition button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addQueryCompositionListener(ActionListener listener) {
     queryCompositionButton.addActionListener(listener);
     confirmQueryCompositionButton.addActionListener(listener);
   }
 
+  /**
+   * Adds an ActionListener to the save portfolio button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addSavePortfolioListener(ActionListener listener) {
     savePortfolioButton.addActionListener(listener);
   }
 
+  /**
+   * Adds an ActionListener to the load portfolio button.
+   *
+   * @param listener The ActionListener to be added.
+   */
   public void addLoadPortfolioListener(ActionListener listener) {
     loadPortfolioButton.addActionListener(listener);
   }
 
-  // Method to clear add stock input fields
+  /**
+   * Clears the add stock input fields by setting their text to an empty string.
+   */
   public void clearAddStockFields() {
     addStockSymbolField.setText("");
     addStockQuantityField.setText("");
@@ -331,7 +484,9 @@ public class GuiView extends JFrame {
     addStockDayField.setText("");
   }
 
-  // Method to clear sell stock input fields
+  /**
+   * Clears the sell stock input fields by setting their text to an empty string.
+   */
   public void clearSellStockFields() {
     sellStockSymbolField.setText("");
     sellStockQuantityField.setText("");
@@ -340,17 +495,21 @@ public class GuiView extends JFrame {
     sellStockDayField.setText("");
   }
 
-  // Add more clear methods for other panels if necessary
+  /**
+   * Clears the query value input fields by setting their text to an empty string.
+   */
   public void clearQueryValueFields() {
     queryValueYearField.setText("");
     queryValueMonthField.setText("");
     queryValueDayField.setText("");
   }
 
+  /**
+   * Clears the query composition input fields by setting their text to an empty string.
+   */
   public void clearQueryCompositionFields() {
     queryCompositionYearField.setText("");
     queryCompositionMonthField.setText("");
     queryCompositionDayField.setText("");
   }
-
 }

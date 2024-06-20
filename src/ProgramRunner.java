@@ -2,7 +2,6 @@ import javax.swing.SwingUtilities;
 import controller.GuiController;
 import controller.StockController;
 import view.GuiView;
-import view.MockViewStocks;
 import view.ViewStocks;
 
 /**
@@ -35,7 +34,7 @@ public class ProgramRunner {
    */
   private static void launchTextMode() {
     ViewStocks view = new ViewStocks();
-    StockController textApp = new StockController(view);  
+    StockController textApp = new StockController(view);
     textApp.start();
     System.exit(0);
   }

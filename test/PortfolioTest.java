@@ -160,7 +160,7 @@ public class PortfolioTest {
     Map<String, Double> expectedDistribution = portfolio.getComposition(date).entrySet().stream()
             .collect(Collectors.toMap(
                     Map.Entry::getKey,
-                    entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
+                entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
             ));
 
     Map<String, Double> actualDistribution = portfolio.getValueDistribution(date, model);

@@ -1,24 +1,39 @@
 package controller;
 
-import model.*;
+import model.AlphaVantageAPI;
+import model.IModel;
+import model.IPortfolio;
+import model.IStockInfo;
+import model.Portfolio;
+import model.PortfolioManager;
+import model.StockInfo;
 import view.GuiView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+/**
+ * The GUI controller class is responsible for handing user interactions from the GUI interface,
+ * performing operations on the portfolio, and updating the view with results inputted by the user.
+ */
 public class GuiController {
   private final GuiView view;
   private IPortfolio portfolio;
   private final IModel model;
 
+  /**
+   * Constructs a GuiController with the specified view and parameters.
+   *
+   * @param view the view our GUI interacts with
+   */
   public GuiController(GuiView view) {
     this.view = view;
     this.model = new PortfolioManager(new AlphaVantageAPI());
@@ -31,6 +46,10 @@ public class GuiController {
     this.view.addLoadPortfolioListener(new LoadPortfolioListener());
   }
 
+  /**
+   * Listener for creating a new portfolio. Prompts the user to enter a client name and creates a
+   * new portfolio for that client.
+   */
   public class CreatePortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -42,6 +61,11 @@ public class GuiController {
     }
   }
 
+  /**
+   * Listener for adding a stock to the portfolio. Prompts the user to enter the stock symbol,
+   * quantity, and purchase date. Validates the input and adds the stock to the portfolio.
+   * Updates the view with the result.
+   */
   class AddStockListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -56,12 +80,14 @@ public class GuiController {
           int day = Integer.parseInt(view.getAddStockDay());
           LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          System.out.println("Adding stock - Symbol: " + symbol + ", Quantity: " + quantity
+                  + ", Date: " + localDate);
           double price = model.fetchStockPrice(symbol, localDate);
           System.out.println("Fetched price for " + symbol + " on " + localDate + ": " + price);
           IStockInfo stock = new StockInfo(symbol, symbol, localDate.toString(), quantity);
           portfolio.addStock(stock);
-          view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          view.setResultArea("Stock added: " + symbol + ", Quantity: " + quantity + ", Date: "
+                  + localDate);
           view.clearAddStockFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
@@ -76,6 +102,11 @@ public class GuiController {
     }
   }
 
+  /**
+   * Listener for selling a stock from the portfolio. Prompts the user to enter the stock symbol,
+   * quantity, and sale date. Validates the input and removes the stock from the portfolio.
+   * Updates the view with the result.
+   */
   class SellStockListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -90,9 +121,11 @@ public class GuiController {
           int day = Integer.parseInt(view.getSellStockDay());
           LocalDate localDate = LocalDate.of(year, month, day);
 
-          System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          System.out.println("Selling stock - Symbol: " + symbol + ", Quantity: " + quantity
+                  + ", Date: " + localDate);
           portfolio.sellStock(symbol, localDate, quantity);
-          view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: " + localDate);
+          view.setResultArea("Stock sold: " + symbol + ", Quantity: " + quantity + ", Date: "
+                  + localDate);
           view.clearSellStockFields();
           view.showActionPanel();
         } catch (NumberFormatException ex) {
@@ -107,7 +140,11 @@ public class GuiController {
     }
   }
 
-
+  /**
+   * Listener for querying the value of the portfolio on a specific date. Prompts the user to
+   * enter the date for which the portfolio value is to be calculated. Validates the input,
+   * calculates the portfolio value, and updates the view with the result.
+   */
   class QueryValueListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -137,6 +174,11 @@ public class GuiController {
     }
   }
 
+  /**
+   * Listener for querying the composition of the portfolio on a specific date. Prompts the user
+   * to enter the date for which the portfolio composition is to be retrieved. Validates the input,
+   * retrieves the portfolio composition, and updates the view with the result.
+   */
   class QueryCompositionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -151,7 +193,8 @@ public class GuiController {
 
           System.out.println("Querying portfolio composition - Date: " + localDate);
           Map<String, Integer> composition = portfolio.getComposition(localDate);
-          StringBuilder result = new StringBuilder("Portfolio composition on " + localDate + ":\n");
+          StringBuilder result = new StringBuilder("Portfolio composition on " + localDate
+                  + ":\n");
           for (Map.Entry<String, Integer> entry : composition.entrySet()) {
             result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
           }
@@ -170,6 +213,10 @@ public class GuiController {
     }
   }
 
+  /**
+   * Listener for saving the portfolio to a file. Prompts the user to choose a file location
+   * and saves the portfolio to the selected file.
+   */
   class SavePortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -183,6 +230,10 @@ public class GuiController {
     }
   }
 
+  /**
+   * Listener for loading the portfolio from a file. Prompts the user to choose a file location
+   * and loads the portfolio to the text-based interface or GUI.
+   */
   class LoadPortfolioListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -194,9 +245,5 @@ public class GuiController {
         view.setResultArea("Portfolio loaded from: " + file.getAbsolutePath());
       }
     }
-  }
-
-  private LocalDate parseDate(int year, int month, int day) throws DateTimeParseException {
-    return LocalDate.of(year, month, day);
   }
 }

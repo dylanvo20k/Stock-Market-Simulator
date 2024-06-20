@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -43,6 +42,8 @@ public class Portfolio implements IPortfolio {
 
   @Override
   public void addStock(IStockInfo stock) {
+    // We made a check that verifies that a stock inputted by a user is valid before adding it to
+    // the list permanently.
     if (stock.isValid()) {
       stockList.add(stock);
     } else {
@@ -78,6 +79,8 @@ public class Portfolio implements IPortfolio {
 
   @Override
   public Map<String, Integer> getComposition(LocalDate date) {
+    // We made a check that verifies that the date is valid before retrieving the composition of
+    // a portfolio.
     if (date == null) {
       throw new IllegalArgumentException("Date cannot be null.");
     }
@@ -101,7 +104,7 @@ public class Portfolio implements IPortfolio {
     return getComposition(date).entrySet().stream()
             .collect(Collectors.toMap(
                     Map.Entry::getKey,
-                    entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
+                entry -> model.fetchStockPrice(entry.getKey(), date) * entry.getValue()
             ));
   }
 

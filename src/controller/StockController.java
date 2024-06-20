@@ -11,10 +11,15 @@ import model.PortfolioManager;
 import model.StockInfo;
 import view.IView;
 import view.ViewStocks;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -24,7 +29,11 @@ import static java.time.temporal.ChronoUnit.DAYS;
  * saving and loading portfolios from files, and interaction with the user.
  */
 public class StockController implements IController {
+  // Initially we used our concrete PortfolioManager class, but changed it to IModel for better
+  // design and functionality.
   private IModel portfolioManager;
+  // For our list, we originally used a Portfolio, however we changed it to IPortfolio for better
+  // design and functionality.
   private List<IPortfolio> portfolios;
   private IView view;
 
@@ -43,6 +52,8 @@ public class StockController implements IController {
   public void start() {
     Scanner scanner = new Scanner(System.in);
     while (true) {
+      // In assignment 5 we didn't call our displayMenu in view, so we changed our code to
+      // call the displayMenu from view for assignment 6
       view.displayMenu();
       int choice = scanner.nextInt();
 
@@ -238,7 +249,10 @@ public class StockController implements IController {
       return;
     }
 
-    int year, month, day;
+    int year;
+    int month;
+    int day;
+
     try {
       System.out.print("Enter date year (YYYY): ");
       year = scanner.nextInt();
@@ -340,8 +354,8 @@ public class StockController implements IController {
       day = scanner.nextInt();
       LocalDate endDate = LocalDate.of(year, month, day);
 
-      double movingAverage = portfolioManager.
-              calculateMovingDayAverage(tickerSymbol, days, endDate);
+      double movingAverage = portfolioManager
+              .calculateMovingDayAverage(tickerSymbol, days, endDate);
       System.out.printf("Moving %d-day average for %s ending on %s: %.2f\n",
               days, tickerSymbol, endDate, movingAverage);
     } catch (IllegalArgumentException e) {
@@ -478,6 +492,7 @@ public class StockController implements IController {
 
       double totalPercentage = targetAllocation.values().stream()
               .mapToDouble(Double::doubleValue).sum();
+      // We made a check to verify that weights inputted by a user are valid.
       if (totalPercentage != 100) {
         System.out.println("Error: Total weights must add up to 100%.");
         return;

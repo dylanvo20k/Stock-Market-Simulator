@@ -20,8 +20,8 @@ public class PortfolioManager implements IModel {
   @Override
   public double calculateMovingDayAverage(String tickerSymbol, int days, LocalDate endDate) {
     try {
-      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices
-              (tickerSymbol, endDate.minusDays(days - 1), endDate);
+      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices(
+              tickerSymbol, endDate.minusDays(days - 1), endDate);
       double sum = 0.0;
       for (double price : closingPrices) {
         sum += price;
@@ -37,8 +37,8 @@ public class PortfolioManager implements IModel {
                                           LocalDate startDate, LocalDate endDate) {
     try {
       List<LocalDate> crossovers = new ArrayList<>();
-      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices
-              (tickerSymbol, startDate, endDate);
+      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices(
+              tickerSymbol, startDate, endDate);
 
       for (int i = days; i < closingPrices.size(); i++) {
         double movingAverage = calculateMovingDayAverage(tickerSymbol, days, startDate.plusDays(i));
@@ -55,11 +55,11 @@ public class PortfolioManager implements IModel {
   @Override
   public double calculateGainOrLoss(String tickerSymbol, LocalDate startDate, LocalDate endDate) {
     try {
-      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices
-              (tickerSymbol, startDate, endDate);
+      List<Double> closingPrices = stockDataFetcher.fetchClosingPrices(
+              tickerSymbol, startDate, endDate);
       if (closingPrices.size() < 2) {
-        throw new IllegalArgumentException("Insufficient data for the given data range, " +
-                "please provide at least 2 closing prices.");
+        throw new IllegalArgumentException("Insufficient data for the given data range, "
+                + "please provide at least 2 closing prices.");
       }
       double startPrice = closingPrices.get(0);
       double endPrice = closingPrices.get(closingPrices.size() - 1);
