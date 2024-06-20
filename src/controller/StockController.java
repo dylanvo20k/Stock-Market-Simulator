@@ -474,8 +474,8 @@ public class StockController implements IController {
       day = scanner.nextInt();
       LocalDate rebalanceDate = LocalDate.of(year, month, day);
 
-      System.out.println("Enter the stock and weight percentages " +
-              "for each stock followed by 'done' (i.e GOOG 20 done): ");
+      System.out.println("Enter the stock and weight percentages "
+              + "for each stock followed by 'done' (i.e GOOG 20 done): ");
       Map<String, Double> targetAllocation = new HashMap<>();
       while (scanner.hasNext()) {
         String ticker = scanner.next();
@@ -511,17 +511,16 @@ public class StockController implements IController {
       for (Map.Entry<String, Double> entry : intendedValues.entrySet()) {
         String tickerSymbol = entry.getKey();
         double intendedValue = entry.getValue();
-        int currentQuantity = composition.getOrDefault(tickerSymbol, 0);
         double currentValue = valueDistribution.getOrDefault(tickerSymbol, 0.0);
 
         if (currentValue > intendedValue) {
-          int sellQuantity = (int) ((currentValue - intendedValue) /
-                  portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate));
+          int sellQuantity = (int) ((currentValue - intendedValue)
+                  / portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate));
           IStockInfo sellingStock = new StockInfo("", tickerSymbol,
                   rebalanceDate.toString(), sellQuantity);
           portfolio.sellStock(sellingStock.getTickerSymbol(), rebalanceDate, sellQuantity);
-          System.out.println("Sold " + sellQuantity + " shares of " +
-                  tickerSymbol + " to rebalance the portfolio.");
+          System.out.println("Sold " + sellQuantity + " shares of "
+                  + tickerSymbol + " to rebalance the portfolio.");
         } else if (currentValue < intendedValue) {
           double stockPrice = portfolioManager.fetchStockPrice(tickerSymbol, rebalanceDate);
           int buyQuantity = (int) ((intendedValue - currentValue) / stockPrice);

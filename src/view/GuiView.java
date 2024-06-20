@@ -20,7 +20,7 @@ import java.awt.GridLayout;
  * creating a portfolio, buying/selling stocks, querying portfolio value, querying portfolio
  * composition, and saving/loading portfolio files.
  */
-public class GuiView extends JFrame {
+public class GuiView extends JFrame implements IGuiView {
   private JPanel mainPanel;
   private CardLayout cardLayout;
 
@@ -211,271 +211,156 @@ public class GuiView extends JFrame {
     queryCompositionPanel.add(new JLabel(""));
   }
 
-  /**
-   * Shows the action panel in the GUI using CardLayout.
-   * This panel contains main buttons for various actions.
-   */
+  @Override
   public void showActionPanel() {
     cardLayout.show(mainPanel, "actionPanel");
   }
 
-  /**
-   * Shows the add stock panel in the GUI using CardLayout.
-   * This panel allows users to input details for adding a stock.
-   */
+  @Override
   public void showAddStockPanel() {
     cardLayout.show(mainPanel, "addStockPanel");
   }
 
-  /**
-   * Shows the sell stock panel in the GUI using CardLayout.
-   * This panel allows users to input details for selling a stock.
-   */
+  @Override
   public void showSellStockPanel() {
     cardLayout.show(mainPanel, "sellStockPanel");
   }
 
-  /**
-   * Shows the query value panel in the GUI using CardLayout.
-   * This panel allows users to input a date to query the portfolio value.
-   */
+  @Override
   public void showQueryValuePanel() {
     cardLayout.show(mainPanel, "queryValuePanel");
   }
 
-  /**
-   * Shows the query composition panel in the GUI using CardLayout.
-   * This panel allows users to input a date to query the portfolio composition.
-   */
+  @Override
   public void showQueryCompositionPanel() {
     cardLayout.show(mainPanel, "queryCompositionPanel");
   }
 
-  /**
-   * Retrieves the text entered in the add stock symbol field.
-   *
-   * @return The text entered in the add stock symbol field.
-   */
+  @Override
   public String getAddStockSymbol() {
     return addStockSymbolField.getText();
   }
 
-  /**
-   * Retrieves the integer value entered in the add stock quantity field.
-   *
-   * @return The integer value entered in the add stock quantity field.
-   * @throws NumberFormatException if the text in the field is not a valid integer.
-   */
+  @Override
   public int getAddStockQuantity() {
     return Integer.parseInt(addStockQuantityField.getText());
   }
 
-  /**
-   * Retrieves the text entered in the add stock year field.
-   *
-   * @return The text entered in the add stock year field.
-   */
+  @Override
   public String getAddStockYear() {
     return addStockYearField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the add stock month field.
-   *
-   * @return The text entered in the add stock month field.
-   */
+  @Override
   public String getAddStockMonth() {
     return addStockMonthField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the add stock day field.
-   *
-   * @return The text entered in the add stock day field.
-   */
+  @Override
   public String getAddStockDay() {
     return addStockDayField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the sell stock symbol field.
-   *
-   * @return The text entered in the sell stock symbol field.
-   */
+  @Override
   public String getSellStockSymbol() {
     return sellStockSymbolField.getText();
   }
 
-  /**
-   * Retrieves the integer value entered in the sell stock quantity field.
-   *
-   * @return The integer value entered in the sell stock quantity field.
-   * @throws NumberFormatException if the text in the field is not a valid integer.
-   */
+  @Override
   public int getSellStockQuantity() {
     return Integer.parseInt(sellStockQuantityField.getText());
   }
 
-  /**
-   * Retrieves the text entered in the sell stock year field.
-   *
-   * @return The text entered in the sell stock year field.
-   */
+  @Override
   public String getSellStockYear() {
     return sellStockYearField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the sell stock month field.
-   *
-   * @return The text entered in the sell stock month field.
-   */
+  @Override
   public String getSellStockMonth() {
     return sellStockMonthField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the sell stock day field.
-   *
-   * @return The text entered in the sell stock day field.
-   */
+  @Override
   public String getSellStockDay() {
     return sellStockDayField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query value year field.
-   *
-   * @return The text entered in the query value year field.
-   */
+  @Override
   public String getQueryValueYear() {
     return queryValueYearField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query value month field.
-   *
-   * @return The text entered in the query value month field.
-   */
+  @Override
   public String getQueryValueMonth() {
     return queryValueMonthField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query value day field.
-   *
-   * @return The text entered in the query value day field.
-   */
+  @Override
   public String getQueryValueDay() {
     return queryValueDayField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query composition year field.
-   *
-   * @return The text entered in the query composition year field.
-   */
+  @Override
   public String getQueryCompositionYear() {
     return queryCompositionYearField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query composition month field.
-   *
-   * @return The text entered in the query composition month field.
-   */
+  @Override
   public String getQueryCompositionMonth() {
     return queryCompositionMonthField.getText();
   }
 
-  /**
-   * Retrieves the text entered in the query composition day field.
-   *
-   * @return The text entered in the query composition day field.
-   */
+  @Override
   public String getQueryCompositionDay() {
     return queryCompositionDayField.getText();
   }
 
-  /**
-   * Sets the text to be displayed in the result area.
-   *
-   * @param text The text to be displayed.
-   */
+  @Override
   public void setResultArea(String text) {
     resultArea.setText(text);
   }
 
-  /**
-   * Adds an ActionListener to the create portfolio button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addCreatePortfolioListener(ActionListener listener) {
     createPortfolioButton.addActionListener(listener);
   }
 
-  /**
-   * Adds ActionListeners to the add stock button and confirm add stock button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addAddStockListener(ActionListener listener) {
     addStockButton.addActionListener(listener);
     confirmAddStockButton.addActionListener(listener);
   }
 
-  /**
-   * Adds ActionListeners to the sell stock button and confirm sell stock button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addSellStockListener(ActionListener listener) {
     sellStockButton.addActionListener(listener);
     confirmSellStockButton.addActionListener(listener);
   }
 
-  /**
-   * Adds ActionListeners to the query value button and confirm query value button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addQueryValueListener(ActionListener listener) {
     queryValueButton.addActionListener(listener);
     confirmQueryValueButton.addActionListener(listener);
   }
 
-  /**
-   * Adds ActionListeners to the query composition button and confirm query composition button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addQueryCompositionListener(ActionListener listener) {
     queryCompositionButton.addActionListener(listener);
     confirmQueryCompositionButton.addActionListener(listener);
   }
 
-  /**
-   * Adds an ActionListener to the save portfolio button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addSavePortfolioListener(ActionListener listener) {
     savePortfolioButton.addActionListener(listener);
   }
 
-  /**
-   * Adds an ActionListener to the load portfolio button.
-   *
-   * @param listener The ActionListener to be added.
-   */
+  @Override
   public void addLoadPortfolioListener(ActionListener listener) {
     loadPortfolioButton.addActionListener(listener);
   }
 
-  /**
-   * Clears the add stock input fields by setting their text to an empty string.
-   */
+  @Override
   public void clearAddStockFields() {
     addStockSymbolField.setText("");
     addStockQuantityField.setText("");
@@ -484,9 +369,7 @@ public class GuiView extends JFrame {
     addStockDayField.setText("");
   }
 
-  /**
-   * Clears the sell stock input fields by setting their text to an empty string.
-   */
+  @Override
   public void clearSellStockFields() {
     sellStockSymbolField.setText("");
     sellStockQuantityField.setText("");
@@ -495,18 +378,14 @@ public class GuiView extends JFrame {
     sellStockDayField.setText("");
   }
 
-  /**
-   * Clears the query value input fields by setting their text to an empty string.
-   */
+  @Override
   public void clearQueryValueFields() {
     queryValueYearField.setText("");
     queryValueMonthField.setText("");
     queryValueDayField.setText("");
   }
 
-  /**
-   * Clears the query composition input fields by setting their text to an empty string.
-   */
+  @Override
   public void clearQueryCompositionFields() {
     queryCompositionYearField.setText("");
     queryCompositionMonthField.setText("");
